@@ -1,0 +1,32 @@
+{
+  "name": "wishlights",
+  "version": "1.0.0",
+  "description": "![](https://github.com/kentywang/wishlights/blob/master/client/img/concept.jpg)",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "nodemon server/app.js --exec babel-node --presets es2015,stage-2",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kentywang/wishlights.git"
+  },
+  "keywords": [
+    "webvr"
+  ],
+  "author": "Kenty Wang, Ani Agajanyan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kentywang/wishlights/issues"
+  },
+  "homepage": "https://github.com/kentywang/wishlights#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "nodemon": "^1.11.0"
+  }
+}
