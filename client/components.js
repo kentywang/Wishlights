@@ -1,6 +1,6 @@
 AFRAME.registerComponent('water', {
   init: function () {  
-    const el = this.el;
+    const entity = this.el;
 
     document.querySelector('a-scene').addEventListener('camera-set-active', function () {
       const renderer = document.querySelector('a-scene').renderer;
@@ -10,7 +10,7 @@ AFRAME.registerComponent('water', {
 
       DEMO.initialize(renderer, camera, scene);
 
-      el.setObject3D('meshMirror', DEMO.aMeshMirror);
+      entity.setObject3D('meshMirror', DEMO.aMeshMirror);
     });
   },
 
@@ -21,7 +21,7 @@ AFRAME.registerComponent('water', {
 
 AFRAME.registerComponent('boat', {
   init: function () {  
-    const el = this.el;
+    const entity = this.el;
     let mesh = null;
     const material = new THREE.MeshPhongMaterial({
       color: '#423028',
@@ -32,27 +32,27 @@ AFRAME.registerComponent('boat', {
     loader.load('./img/boat.json', function(geometry) {
       mesh = new THREE.Mesh(geometry, material);
 
-      el.setObject3D('boaty', mesh);
+      entity.setObject3D('boaty', mesh);
     });
   }
 });
  
 AFRAME.registerComponent('glow', {
   init: function () {  
-    const el = this.el;
+    const entity = this.el;
 
     const spriteMaterial = new THREE.SpriteMaterial({ 
       map: new THREE.ImageUtils.loadTexture('./img/glow.png'), 
       useScreenCoordinates: false, 
-      color: 0x0000ff,
-      transparent: false, 
+      color: entity.getAttribute('material').color,
+      transparent: false,
       blending: THREE.AdditiveBlending,
     });
     const sprite = new THREE.Sprite( spriteMaterial );
-    sprite.scale.set(1, 1, 1.0);
-    sprite.position.set(0,2,-4)
+    sprite.scale.set(1.2, 1.2, 1.2);
+    sprite.position.set(0, -.1, 0);
 
-      el.setObject3D('glowy', sprite);
+    entity.setObject3D('glowy', sprite);
   }
 });
  

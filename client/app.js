@@ -28,9 +28,23 @@ obj.setAttribute('light', {
   decay: 1,
 });
 
+// obviously don't use setTimeout, find proper way to getAttribute once loaded
+setTimeout(() => {
+  obj.setAttribute('animation', {
+    property: 'position',
+    dir: 'alternate',
+    dur: 2000,
+    easing: 'easeInSine',
+    loop: true,
+    to: `0 ${obj.getAttribute('position').y + .5} 0}`,
+  });
+}, 2000);
+
+obj.setAttribute('glow', {});
+
 scene.appendChild(obj);
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 150; i++) {
 	const obj = document.createElement('a-entity');
 	const color = getRandColor();
 
@@ -51,40 +65,42 @@ for (let i = 0; i < 100; i++) {
 	    z: getRandCoord(),
 	});
 
+  obj.setAttribute('glow', {});
+
 	// all lanterns fly in and converge
-  // obj.setAttribute('animation', {
-  //   property: 'position',
-  //   dir: 'alternate',
-  //   dur: 5000,
-  //   easing: 'easeInSine',
-  //   loop: true,
-  //   to: "0 2 -2",
-  // });
+  obj.setAttribute('animation', {
+    property: 'position',
+    dir: 'alternate',
+    dur: 5000,
+    easing: 'easeInSine',
+    loop: true,
+    to: "0 3 -5",
+  });
 
   // all lanterns fly in one direction
   // obviously don't use setTimeout, find proper way to getAttribute once loaded
-  setTimeout(() => {
-		obj.setAttribute('animation', {
-	    property: 'position',
-	    dir: 'alternate',
-	    dur: 5000,
-	    easing: 'easeInSine',
-	    loop: true,
-	    to: `${obj.getAttribute('position').x + 20} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 20}`,
-	  });
-  }, 2000);
+  // setTimeout(() => {
+		// obj.setAttribute('animation', {
+	 //    property: 'position',
+	 //    dir: 'alternate',
+	 //    dur: 5000,
+	 //    easing: 'easeInSine',
+	 //    loop: true,
+	 //    to: `${obj.getAttribute('position').x + 20} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 20}`,
+	 //  });
+  // }, 2000);
 
   // need to change this so that only nearby lanterns lit, and cap the total number of lit lanterns
-  if (Math.random() > .97) {
-  		// never add more than 5 lights, too demanding
-	  	obj.setAttribute('light', {
-		    color,
-		    type: 'point',
-		    intensity: 1,
-		    distance: 20,
-		    decay: 1,
-		  });
-	}
+ //  if (Math.random() > .97) {
+ //  		// never add more than 5 lights, too demanding
+	//   	obj.setAttribute('light', {
+	// 	    color,
+	// 	    type: 'point',
+	// 	    intensity: 1,
+	// 	    distance: 20,
+	// 	    decay: 1,
+	// 	  });
+	// }
   
   // color change not working
   // obj.setAttribute('animation', {
@@ -118,7 +134,7 @@ function getRandColor () {
 }
 
 function getRandCoord (onlyTop = -1) {
-  const coord = Math.random() * 20;
+  const coord = Math.random() * 50;
   return Math.random() < .5 ? coord : coord * onlyTop;
 }
 
