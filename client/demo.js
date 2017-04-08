@@ -117,8 +117,8 @@ var DEMO = {
 
 function makeGradientCube(c1, c2, w, d, h, opacity){
 	if(typeof opacity === 'undefined')opacity = 1.0;
-	if(typeof c1 === 'number')c1 = new THREE.Color( c1 );
-	if(typeof c2 === 'number')c2 = new THREE.Color( c2 );
+	if(typeof c1 === 'number') var lighter = new THREE.Color( c1 );
+	if(typeof c2 === 'number') var darker = new THREE.Color( c2 );
 
 	var cubeGeometry = new THREE.BoxGeometry(w, h, d);
 
@@ -131,18 +131,25 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
 	    cubeMaterial.transparent = true;
 	    }
 
+	const x = parseInt(colorLuminance('#'+c1.toString(16), 1));
+	const y = parseInt(colorLuminance('#'+c2.toString(16), .5));
+
+	const c1b = new THREE.Color(x);
+
+	const c2t = new THREE.Color(y);
+
 	for(var ix=0;ix<12;++ix){
 	    if(ix==4 || ix==5){ //Top edge, all c2
-	        cubeGeometry.faces[ix].vertexColors = [c2,c2,c2];
+	        cubeGeometry.faces[ix].vertexColors = [c2t,c2t,c2t];
 	        }
 	    else if(ix==6 || ix==7){ //Bottom edge, all c1
-	        cubeGeometry.faces[ix].vertexColors = [c1,c1,c1];
+	        cubeGeometry.faces[ix].vertexColors = [c1b,c1b,c1b];
 	        }
 	    else if(ix%2 ==0){ //First triangle on each side edge
-	        cubeGeometry.faces[ix].vertexColors = [c2,c1,c2];
+	        cubeGeometry.faces[ix].vertexColors = [darker,lighter,darker];
 	        }
 	    else{ //Second triangle on each side edge
-	        cubeGeometry.faces[ix].vertexColors = [c1,c1,c2];
+	        cubeGeometry.faces[ix].vertexColors = [lighter,lighter,darker];
 	        }
 	    }
 
@@ -151,8 +158,8 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
 
 function makeGradientCylinder(c1, c2, w, h, opacity){
 	if(typeof opacity === 'undefined')opacity = 1.0;
-	if(typeof c1 === 'number')lighter = new THREE.Color( c1 );
-	if(typeof c2 === 'number')darker = new THREE.Color( c2 );
+	if(typeof c1 === 'number') var lighter = new THREE.Color( c1 );
+	if(typeof c2 === 'number') var darker = new THREE.Color( c2 );
 
 	var cubeGeometry = new THREE.CylinderGeometry(w, w, h, 16, 1);
 
@@ -175,7 +182,7 @@ function makeGradientCylinder(c1, c2, w, h, opacity){
 
 	for(var ix=0;ix<64;++ix){
 	    if (ix >= 32 && ix < 48) {
-	    	cubeGeometry.faces[ix].vertexColors = [c2t,c2t,c2t];
+	    	cubeGeometry.faces[ix].vertexColors = [darker,darker,c2t];
 	    }
 	    else if (ix >= 48) {
 	    	cubeGeometry.faces[ix].vertexColors = [c1b,c1b,c1b];
@@ -192,7 +199,6 @@ function makeGradientCylinder(c1, c2, w, h, opacity){
 }
 
 function colorLuminance(hex, lum) {
-    
     // validate hex string
     hex = String(hex).replace(/[^0-9a-f]/gi, '');
     if(hex.length < 6) {

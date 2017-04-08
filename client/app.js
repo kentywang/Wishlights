@@ -14,7 +14,10 @@ const color = getRandColor();
 //   shader: 'flat',
 // });
 
-obj.setAttribute('lantern',{});
+obj.setAttribute('lantern',{
+  light: color.light,
+  dark: color.dark
+});
 
 obj.setAttribute('position', {
     x: 0,
@@ -23,7 +26,7 @@ obj.setAttribute('position', {
 });
 
 obj.setAttribute('light', {
-  color,
+  color: color.light,
   type: 'point',
   intensity: 1,
   distance: 20,
@@ -46,7 +49,7 @@ setTimeout(() => {
 
 scene.appendChild(obj);
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 200; i++) {
 	const obj = document.createElement('a-entity');
 	const color = getRandColor();
 
@@ -61,12 +64,15 @@ for (let i = 0; i < 100; i++) {
   //   shader: 'flat',
   // });
 
-  obj.setAttribute('lantern',{});
+  obj.setAttribute('lantern',{
+    light: color.light,
+    dark: color.dark
+  });
 
   obj.setAttribute('position', {
-	    x: getRandCoord(),
-	    y: getRandCoord(1),
-	    z: getRandCoord(),
+    x: getRandCoord(),
+    y: getRandCoord(1),
+    z: getRandCoord(),
 	});
 
   obj.setAttribute('glow', {});
@@ -98,7 +104,7 @@ for (let i = 0; i < 100; i++) {
  //  if (Math.random() > .97) {
  //  		// never add more than 5 lights, too demanding
 	//   	obj.setAttribute('light', {
-	// 	    color,
+	// 	    color.light,
 	// 	    type: 'point',
 	// 	    intensity: 1,
 	// 	    distance: 20,
@@ -127,10 +133,13 @@ function getRandColor () {
     // }
 
     const colors = [
-    	"#ffae0c", 	// orange
-    	"#FF4500",	// orangered
-    	"#ff4f6f",	// pink
-    	"#ffd84f",	// yellow
+      {light: 0xffe5b0, dark: 0xe5cd57},  // yellow
+      {light: 0xffae0c, dark: 0xFF4500},  // orange
+      {light: 0xffb587, dark: 0xff8f49},  // light orange
+      {light: 0xffc85b, dark: 0xff8f44},  // orange-pink
+      {light: 0xffc19b, dark: 0xFF8FA7},  // pink
+      {light: 0xFF9EAF, dark: 0xE648A0},  // dark pink
+      {light: 0xFFC191, dark: 0xFF8866},  // pink-orange
     ];
     const color = colors[Math.floor(Math.random() * colors.length)];
 

@@ -44,7 +44,7 @@ AFRAME.registerComponent('glow', {
     const spriteMaterial = new THREE.SpriteMaterial({ 
       map: new THREE.ImageUtils.loadTexture('./img/glow.png'), 
       useScreenCoordinates: false, 
-      color: 0xffae0c,//entity.getAttribute('material').color,
+      color: entity.getAttribute('lantern').light,
       transparent: false,
       blending: THREE.AdditiveBlending,
     });
@@ -59,14 +59,21 @@ AFRAME.registerComponent('glow', {
 
  
 AFRAME.registerComponent('lantern', {
+  schema: {
+    light: {type: 'number'},
+    dark: {type: 'number'}
+  },
+
   init: function () {  
+    const data = this.data;
     const entity = this.el;
 
-    // const mesh = makeGradientCube(0xffae0c, 0xFF4500, .2,.2,.4, 1);
-    const mesh = makeGradientCylinder(0xffae0c, 0xFF4500, .1,.3, 1);
+    const height = Math.random() / 10 + .25;
+    const width = Math.random() / 10 + .1;
 
-
-    //mesh.position.set(0, 1, -3);
+    const mesh = Math.random() > .5 ? 
+      makeGradientCube(data.light, data.dark, width,width,height, .95) :
+      makeGradientCylinder(data.light, data.dark, width/2,height/1.3, .95);
 
     entity.setObject3D('lant', mesh);
   }
