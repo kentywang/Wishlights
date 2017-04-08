@@ -44,7 +44,7 @@ AFRAME.registerComponent('glow', {
     const spriteMaterial = new THREE.SpriteMaterial({ 
       map: new THREE.ImageUtils.loadTexture('./img/glow.png'), 
       useScreenCoordinates: false, 
-      color: entity.getAttribute('material').color,
+      color: 0xffae0c,//entity.getAttribute('material').color,
       transparent: false,
       blending: THREE.AdditiveBlending,
     });
@@ -56,3 +56,18 @@ AFRAME.registerComponent('glow', {
   }
 });
  
+
+ 
+AFRAME.registerComponent('lantern', {
+  init: function () {  
+    const entity = this.el;
+
+    // const mesh = makeGradientCube(0xffae0c, 0xFF4500, .2,.2,.4, 1);
+    const mesh = makeGradientCylinder(0xffae0c, 0xFF4500, .1,.3, 1);
+
+
+    //mesh.position.set(0, 1, -3);
+
+    entity.setObject3D('lant', mesh);
+  }
+});

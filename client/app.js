@@ -3,16 +3,18 @@ const scene = document.querySelector('a-scene');
 const obj = document.createElement('a-entity');
 const color = getRandColor();
 
-obj.setAttribute('geometry', {
-    primitive: 'cylinder',
-    height: .3,
-    radius: .1,
-  });
+// obj.setAttribute('geometry', {
+//     primitive: 'cylinder',
+//     height: .3,
+//     radius: .1,
+//   });
 
-obj.setAttribute('material', {
-  color,
-  shader: 'flat',
-});
+// obj.setAttribute('material', {
+//   color,
+//   shader: 'flat',
+// });
+
+obj.setAttribute('lantern',{});
 
 obj.setAttribute('position', {
     x: 0,
@@ -28,6 +30,8 @@ obj.setAttribute('light', {
   decay: 1,
 });
 
+obj.setAttribute('glow', {});
+
 // obviously don't use setTimeout, find proper way to getAttribute once loaded
 setTimeout(() => {
   obj.setAttribute('animation', {
@@ -40,24 +44,24 @@ setTimeout(() => {
   });
 }, 2000);
 
-obj.setAttribute('glow', {});
-
 scene.appendChild(obj);
 
-for (let i = 0; i < 150; i++) {
+for (let i = 0; i < 100; i++) {
 	const obj = document.createElement('a-entity');
 	const color = getRandColor();
 
-  obj.setAttribute('geometry', {
-    primitive: 'cylinder',
-    height: .3,
-    radius: .1,
-  });
+  // obj.setAttribute('geometry', {
+  //   primitive: 'cylinder',
+  //   height: .3,
+  //   radius: .1,
+  // });
 
-  obj.setAttribute('material', {
-    color,
-    shader: 'flat',
-  });
+  // obj.setAttribute('material', {
+  //   color,
+  //   shader: 'flat',
+  // });
+
+  obj.setAttribute('lantern',{});
 
   obj.setAttribute('position', {
 	    x: getRandCoord(),
