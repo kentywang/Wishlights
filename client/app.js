@@ -264,4 +264,7 @@ function createLantern(parObj) {
   parObj.appendChild(obj);
 
   return obj;
-} 
+}
+
+//let engine = new ParticleEngine();
+// engine.particleMesh.setAttribute('partSystem', {}); 

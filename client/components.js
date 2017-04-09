@@ -78,3 +78,32 @@ AFRAME.registerComponent('lantern', {
     entity.setObject3D('lant', mesh);
   }
 });
+
+AFRAME.registerComponent('partSystem', {
+  schema: {
+    system: {type: 'object'},
+  },
+
+  init: function () {  
+    const entity = this.el;
+    const data = this.data;
+
+    const system = data.system;
+    // let mesh = null;
+    // const material = new THREE.MeshPhongMaterial({
+    //   color: '#423028',
+    //   shading:THREE.FlatShading,
+    // });
+    // const loader = new THREE.JSONLoader();
+
+    // loader.load('./img/boat.json', function(geometry) {
+    //   mesh = new THREE.Mesh(geometry, material);
+
+    //   entity.setObject3D('boaty', mesh);
+    //});
+  },
+
+  tick: function (time, timeDelta) {
+    data.system.update(timeDelta);
+  }
+});

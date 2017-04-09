@@ -88,32 +88,33 @@ function ParticleEngine()
 	// THREE.JS //
 	//////////////
 	
-	this.particleGeometry = new THREE.Geometry();
-	this.particleTexture  = null;
-	this.particleMaterial = new THREE.ShaderMaterial( 
-	{
-		uniforms: 
-		{
-			texture:   { type: "t", value: this.particleTexture },
-		},
-		attributes:     
-		{
-			customVisible:	{ type: 'f',  value: [] },
-			customAngle:	{ type: 'f',  value: [] },
-			customSize:		{ type: 'f',  value: [] },
-			customColor:	{ type: 'c',  value: [] },
-			customOpacity:	{ type: 'f',  value: [] }
-		},
-		vertexShader:   particleVertexShader,
-		fragmentShader: particleFragmentShader,
-		transparent: true, // alphaTest: 0.5,  // if having transparency issues, try including: alphaTest: 0.5, 
-		blending: THREE.NormalBlending, depthTest: true,
+	// this.particleGeometry = new THREE.Geometry();
+	//this.particleTexture  = null;
+	// this.particleMaterial = new THREE.ShaderMaterial( 
+	// {
+	// 	uniforms: 
+	// 	{
+	// 		texture:   { type: "t", value: this.particleTexture },
+	// 	},
+	// 	attributes:     
+	// 	{
+	// 		customVisible:	{ type: 'f',  value: [] },
+	// 		customAngle:	{ type: 'f',  value: [] },
+	// 		customSize:		{ type: 'f',  value: [] },
+	// 		customColor:	{ type: 'c',  value: [] },
+	// 		customOpacity:	{ type: 'f',  value: [] }
+	// 	},
+	// 	vertexShader:   particleVertexShader,
+	// 	fragmentShader: particleFragmentShader,
+	// 	transparent: true, // alphaTest: 0.5,  // if having transparency issues, try including: alphaTest: 0.5, 
+	// 	blending: THREE.NormalBlending, depthTest: true,
 		
-	});
+	// });
 	//this.particleMesh = new THREE.Mesh();
 
 	// Kenty's addition
 	this.particleMesh = document.createElement('a-entity');
+	this.particleMesh.setAttribute('partSystem', { system: this })
 }
 
 ParticleEngine.prototype.initialize = function()
@@ -196,31 +197,61 @@ ParticleEngine.prototype.randomVector3 = function(base, spread)
 	return new THREE.Vector3().addVectors( base, new THREE.Vector3().multiplyVectors( spread, rand3 ) );
 }
 
-Particle.prototype.update = function(dt)
+ParticleEngine.prototype.update = function(dt)
 {
-	this.position.add( this.velocity.clone().multiplyScalar(dt) );
-	this.velocity.add( this.acceleration.clone().multiplyScalar(dt) );
+	var recycleIndices = [];
 	
-	// convert from degrees to radians: 0.01745329251 = Math.PI/180
-	this.angle         += this.angleVelocity     * 0.01745329251 * dt;
-	this.angleVelocity += this.angleAcceleration * 0.01745329251 * dt;
-
-	this.age += dt;
-	
-	// if the tween for a given attribute is nonempty,
-	//  then use it to update the attribute's value
-
-	if ( this.sizeTween.times.length > 0 )
-		this.size = this.sizeTween.lerp( this.age );
-				
-	if ( this.colorTween.times.length > 0 )
+	// update particle data
+	for (var i = 0; i < this.particleCount; i++)
 	{
-		var colorHSL = this.colorTween.lerp( this.age );
-		this.color = new THREE.Color().setHSL( colorHSL.x, colorHSL.y, colorHSL.z );
+		if ( this.particleArray[i].alive )
+		{
+			this.particleArray[i].update(dt);
+
+			// check if particle should expire
+			// could also use: death by size<0 or alpha<0.
+			if ( this.particleArray[i].age > this.particleDeathAge ) 
+			{
+				this.particleArray[i].alive = 0.0;
+				recycleIndices.push(i);
+			}
+			// update particle properties in shader
+			this.particleMaterial.attributes.customVisible.value[i] = this.particleArray[i].alive;
+			this.particleMaterial.attributes.customColor.value[i]   = this.particleArray[i].color;
+			this.particleMaterial.attributes.customOpacity.value[i] = this.particleArray[i].opacity;
+			this.particleMaterial.attributes.customSize.value[i]    = this.particleArray[i].size;
+			this.particleMaterial.attributes.customAngle.value[i]   = this.particleArray[i].angle;
+		}		
 	}
-	
-	if ( this.opacityTween.times.length > 0 )
-		this.opacity = this.opacityTween.lerp( this.age );
+
+	// check if particle emitter is still running
+	if ( !this.emitterAlive ) return;
+
+	// if no particles have died yet, then there are still particles to activate
+	if ( this.emitterAge < this.particleDeathAge )
+	{
+		// determine indices of particles to activate
+		var startIndex = Math.round( this.particlesPerSecond * (this.emitterAge +  0) );
+		var   endIndex = Math.round( this.particlesPerSecond * (this.emitterAge + dt) );
+		if  ( endIndex > this.particleCount ) 
+			  endIndex = this.particleCount; 
+			  
+		for (var i = startIndex; i < endIndex; i++)
+			this.particleArray[i].alive = 1.0;		
+	}
+
+	// if any particles have died while the emitter is still running, we imediately recycle them
+	for (var j = 0; j < recycleIndices.length; j++)
+	{
+		var i = recycleIndices[j];
+		this.particleArray[i] = this.createParticle();
+		this.particleArray[i].alive = 1.0; // activate right away
+		this.particleGeometry.vertices[i] = this.particleArray[i].position;
+	}
+
+	// stop emitter?
+	this.emitterAge += dt;
+	if ( this.emitterAge > this.emitterDeathAge )  this.emitterAlive = false;
 }
 
 
