@@ -1,3 +1,5 @@
+// WORK IN PROGRESS
+
 const system = {
 	positionStyle  : 'cube',
 	positionBase   : new THREE.Vector3( 0, 100, 0 ),
@@ -302,3 +304,56 @@ Particle.prototype.update = function(dt)
 	if ( this.opacityTween.times.length > 0 )
 		this.opacity = this.opacityTween.lerp( this.age );
 }
+
+
+function createLantern(parentObject) {
+  const obj = document.createElement('a-entity');
+  const color = getRandColor();
+
+  obj.setAttribute('lantern',{
+    light: color.light,
+    dark: color.dark
+  });
+
+  obj.setAttribute('position', {
+    x: 0,
+    y: 0,
+    z: 0,
+  }); 
+  
+  obj.setAttribute('rotation', {
+    x: 0,
+    y: Math.random() * 90,
+    z: 0,
+  });
+
+  obj.setAttribute('glow', {});
+
+  setTimeout(() => {
+    // obj.setAttribute('animation', {
+    //   property: 'position',
+    //   dir: 'alternate',
+    //   dur: 10000,
+    //   easing: 'easeInSine',
+    //   loop: true,
+    //   to: `${obj.getAttribute('position').x + 10} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 10}`,
+    // });
+
+    obj.setAttribute('animation__2', {
+      property: 'rotation',
+      dur: 10000 + Math.random() * 8000,
+      easing: 'linear',
+      loop: true,
+      to: `0 ${obj.getAttribute('rotation').y + 360 * randomSign()} 0`,
+    });
+  }, 2000);
+
+  parentObject.appendChild(obj);
+
+  return obj;
+}
+
+// follow code probably should go in app.js
+
+// let engine = new ParticleEngine();
+// engine.particleMesh.setAttribute('partSystem', {}); 

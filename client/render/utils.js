@@ -98,3 +98,27 @@ function colorLuminance(hex, lum) {
     //console.log(rgb);
     return rgb;
 }
+
+function getRandCoord (maxDist, onlyTop = -1) {
+  const coord = Math.random() * maxDist;
+  return Math.random() < .5 ? coord : coord * onlyTop;
+}
+
+function randomSign() {
+  return Math.random() > .5 ? -1 : 1;
+}
+
+function getRandColor () {
+    const colors = [
+      {light: 0xffe5b0, dark: 0xe5cd57},  // yellow
+      {light: 0xffae0c, dark: 0xFF4500},  // orange
+      {light: 0xffb587, dark: 0xff8f49},  // light orange
+      {light: 0xffc85b, dark: 0xff8f44},  // orange-pink
+      {light: 0xffc19b, dark: 0xFF8FA7},  // pink
+      {light: 0xFF9EAF, dark: 0xE648A0},  // dark pink
+      {light: 0xFFC191, dark: 0xFF8866},  // pink-orange
+    ];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    return color;
+}
