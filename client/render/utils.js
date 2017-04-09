@@ -1,4 +1,6 @@
-function makeGradientCube(c1, c2, w, d, h, opacity){
+
+export default class Utils {
+static makeGradientCube(c1, c2, w, d, h, opacity){
 	if(typeof opacity === 'undefined')opacity = 1.0;
 	if(typeof c1 === 'number') var lighter = new THREE.Color( c1 );
 	if(typeof c2 === 'number') var darker = new THREE.Color( c2 );
@@ -14,8 +16,8 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
 	    cubeMaterial.transparent = true;
 	    }
 
-	const x = parseInt(colorLuminance('#'+c1.toString(16), 1));
-	const y = parseInt(colorLuminance('#'+c2.toString(16), .5));
+	const x = parseInt(Utils.colorLuminance('#'+c1.toString(16), 1));
+	const y = parseInt(Utils.colorLuminance('#'+c2.toString(16), .5));
 
 	const c1b = new THREE.Color(x);
 
@@ -39,7 +41,7 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
 	return new THREE.Mesh(cubeGeometry, cubeMaterial);
 }
 
-function makeGradientCylinder(c1, c2, w, h, opacity){
+static makeGradientCylinder(c1, c2, w, h, opacity){
 	if(typeof opacity === 'undefined')opacity = 1.0;
 	if(typeof c1 === 'number') var lighter = new THREE.Color( c1 );
 	if(typeof c2 === 'number') var darker = new THREE.Color( c2 );
@@ -55,8 +57,8 @@ function makeGradientCylinder(c1, c2, w, h, opacity){
 	    cubeMaterial.transparent = true;
 	}
 	
-	const x = parseInt(colorLuminance('#'+c1.toString(16), .5));
-	const y = parseInt(colorLuminance('#'+c2.toString(16), .5));
+	const x = parseInt(Utils.colorLuminance('#'+c1.toString(16), .5));
+	const y = parseInt(Utils.colorLuminance('#'+c2.toString(16), .5));
 
 	const c1b = new THREE.Color(x);
 	const c2t = new THREE.Color(y);
@@ -80,7 +82,7 @@ function makeGradientCylinder(c1, c2, w, h, opacity){
 	return new THREE.Mesh(cubeGeometry, cubeMaterial);
 }
 
-function colorLuminance(hex, lum) {
+static colorLuminance(hex, lum) {
     // validate hex string
     hex = String(hex).replace(/[^0-9a-f]/gi, '');
     if(hex.length < 6) {
@@ -99,16 +101,16 @@ function colorLuminance(hex, lum) {
     return rgb;
 }
 
-function getRandCoord (maxDist, onlyTop = -1) {
+static getRandCoord (maxDist, onlyTop = -1) {
   const coord = Math.random() * maxDist;
   return Math.random() < .5 ? coord : coord * onlyTop;
 }
 
-function randomSign() {
+static randomSign() {
   return Math.random() > .5 ? -1 : 1;
 }
 
-function getRandColor () {
+static getRandColor () {
     const colors = [
       {light: 0xffe5b0, dark: 0xe5cd57},  // yellow
       {light: 0xffae0c, dark: 0xFF4500},  // orange
@@ -121,4 +123,5 @@ function getRandColor () {
     const color = colors[Math.floor(Math.random() * colors.length)];
 
     return color;
+}
 }

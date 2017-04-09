@@ -1,3 +1,6 @@
+import Utils from './utils';
+import water from './water';
+
 AFRAME.registerComponent('water', {
   init: function () {  
     const entity = this.el;
@@ -71,8 +74,8 @@ AFRAME.registerComponent('lantern', {
     const width = Math.random() / 10 + .1;
 
     const mesh = Math.random() > .5 ? 
-      makeGradientCube(data.light, data.dark, width,width,height, .95) :
-      makeGradientCylinder(data.light, data.dark, width/2,height/1.3, .95);
+      Utils.makeGradientCube(data.light, data.dark, width,width,height, .95) :
+      Utils.makeGradientCylinder(data.light, data.dark, width/2,height/1.3, .95);
 
     entity.setObject3D('lant', mesh);
   }
