@@ -51,7 +51,7 @@ var DEMO = {
 			waterColor: 0x000000,
 			betaVersion: 0,
 			side: THREE.DoubleSide,
-			distortionScale: 20,
+			distortionScale: 15,
 		});
 		this.aMeshMirror = new THREE.Mesh(
 			new THREE.PlaneBufferGeometry(2000, 2000, 10, 10), 
@@ -172,11 +172,10 @@ function makeGradientCylinder(c1, c2, w, h, opacity){
 	    cubeMaterial.transparent = true;
 	}
 	
-	const x = parseInt(colorLuminance('#'+c1.toString(16), 1));
+	const x = parseInt(colorLuminance('#'+c1.toString(16), .5));
 	const y = parseInt(colorLuminance('#'+c2.toString(16), .5));
 
 	const c1b = new THREE.Color(x);
-
 	const c2t = new THREE.Color(y);
 
 
@@ -185,7 +184,7 @@ function makeGradientCylinder(c1, c2, w, h, opacity){
 	    	cubeGeometry.faces[ix].vertexColors = [darker,darker,c2t];
 	    }
 	    else if (ix >= 48) {
-	    	cubeGeometry.faces[ix].vertexColors = [c1b,c1b,c1b];
+	    	cubeGeometry.faces[ix].vertexColors = [c1b,c1b,new THREE.Color(0xffffff)];
 	    }
 	    else if(ix%2 ==0){
 	        cubeGeometry.faces[ix].vertexColors = [darker,lighter,darker];

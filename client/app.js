@@ -1,5 +1,6 @@
 const scene = document.querySelector('a-scene');
 
+let parObj = document.createElement('a-entity');
 const obj = document.createElement('a-entity');
 const color = getRandColor();
 
@@ -25,6 +26,12 @@ obj.setAttribute('position', {
     z: 0,
 });
 
+obj.setAttribute('rotation', {
+    x: 0,
+    y: Math.random() * 90,
+    z: 0,
+});
+
 obj.setAttribute('light', {
   color: color.light,
   type: 'point',
@@ -45,12 +52,23 @@ setTimeout(() => {
     loop: true,
     to: `0 ${obj.getAttribute('position').y + .5} 0}`,
   });
+
+  obj.setAttribute('animation__2', {
+      property: 'rotation',
+      dur: 8000,
+      easing: 'linear',
+      loop: true,
+      to: `0 ${obj.getAttribute('rotation').y + 360} 0`,
+  });
 }, 2000);
 
-scene.appendChild(obj);
+parObj.appendChild(obj);
+scene.appendChild(parObj);
+
+parObj = document.createElement('a-entity');
 
 for (let i = 0; i < 200; i++) {
-	const obj = document.createElement('a-entity');
+  const obj = document.createElement('a-entity');
 	const color = getRandColor();
 
   // obj.setAttribute('geometry', {
@@ -69,36 +87,70 @@ for (let i = 0; i < 200; i++) {
     dark: color.dark
   });
 
-  obj.setAttribute('position', {
-    x: getRandCoord(),
-    y: getRandCoord(1),
-    z: getRandCoord(),
-	});
+  if (i < 50) {
+    obj.setAttribute('position', {
+      x: getRandCoord(3),
+      y: getRandCoord(2, 1),
+      z: getRandCoord(3),
+    }); 
+  } else if (i < 150) {
+    obj.setAttribute('position', {
+      x: getRandCoord(6),
+      y: getRandCoord(4, 1),
+      z: getRandCoord(6),
+    }); 
+  } else if (i < 180) {
+    obj.setAttribute('position', {
+      x: getRandCoord(20),
+      y: getRandCoord(15, 1),
+      z: getRandCoord(20),
+    }); 
+  } else {
+    obj.setAttribute('position', {
+      x: getRandCoord(50),
+      y: getRandCoord(30, 1),
+      z: getRandCoord(50),
+    }); 
+  }
+  
+  obj.setAttribute('rotation', {
+    x: 0,
+    y: Math.random() * 90,
+    z: 0,
+  });
 
   obj.setAttribute('glow', {});
 
 	// all lanterns fly in and converge
-  obj.setAttribute('animation', {
-    property: 'position',
-    dir: 'alternate',
-    dur: 5000,
-    easing: 'easeInSine',
-    loop: true,
-    to: "0 3 -5",
-  });
+  // obj.setAttribute('animation', {
+  //   property: 'position',
+  //   dir: 'alternate',
+  //   dur: 8000,
+  //   easing: 'easeInSine',
+  //   loop: true,
+  //   to: "0 3 -5",
+  // });
 
   // all lanterns fly in one direction
   // obviously don't use setTimeout, find proper way to getAttribute once loaded
-  // setTimeout(() => {
-		// obj.setAttribute('animation', {
-	 //    property: 'position',
-	 //    dir: 'alternate',
-	 //    dur: 5000,
-	 //    easing: 'easeInSine',
-	 //    loop: true,
-	 //    to: `${obj.getAttribute('position').x + 20} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 20}`,
-	 //  });
-  // }, 2000);
+  setTimeout(() => {
+		obj.setAttribute('animation', {
+	    property: 'position',
+	    dir: 'alternate',
+	    dur: 10000,
+	    easing: 'easeInSine',
+	    loop: true,
+	    to: `${obj.getAttribute('position').x + 10} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 10}`,
+	  });
+
+    obj.setAttribute('animation__2', {
+      property: 'rotation',
+      dur: 10000 + Math.random() * 8000,
+      easing: 'linear',
+      loop: true,
+      to: `0 ${obj.getAttribute('rotation').y + 360 * randSign()} 0`,
+    });
+  }, 2000);
 
   // need to change this so that only nearby lanterns lit, and cap the total number of lit lanterns
  //  if (Math.random() > .97) {
@@ -122,8 +174,20 @@ for (let i = 0; i < 200; i++) {
   //   to: '#5F5',
   // });
 
-  scene.appendChild(obj);
+  parObj.appendChild(obj);
 }
+
+// setTimeout(() => {
+//       parObj.setAttribute('animation', {
+//       property: 'rotation',
+//       dur: 20000,
+//       easing: 'linear',
+//       loop: true,
+//       to: `0 360 0`,
+//     });
+//   }, 2000);
+
+scene.appendChild(parObj);
 
 function getRandColor () {
     // const letters = '0123456789ABCDEF'.split('');
@@ -146,17 +210,58 @@ function getRandColor () {
     return color;
 }
 
-function getRandCoord (onlyTop = -1) {
-  const coord = Math.random() * 50;
+function getRandCoord (maxDist, onlyTop = -1) {
+  const coord = Math.random() * maxDist;
   return Math.random() < .5 ? coord : coord * onlyTop;
 }
 
-function gaussianRand() {
-  var rand = 0;
-
-  for (var i = 0; i < 6; i += 1) {
-    rand += Math.random();
-  }
-
-  return rand / 6;
+function randSign() {
+  return Math.random() > .5 ? -1 : 1;
 }
+
+function createLantern(parObj) {
+  const obj = document.createElement('a-entity');
+  const color = getRandColor();
+
+  obj.setAttribute('lantern',{
+    light: color.light,
+    dark: color.dark
+  });
+
+  obj.setAttribute('position', {
+    x: 0,
+    y: 0,
+    z: 0,
+  }); 
+  
+  obj.setAttribute('rotation', {
+    x: 0,
+    y: Math.random() * 90,
+    z: 0,
+  });
+
+  obj.setAttribute('glow', {});
+
+  setTimeout(() => {
+    // obj.setAttribute('animation', {
+    //   property: 'position',
+    //   dir: 'alternate',
+    //   dur: 10000,
+    //   easing: 'easeInSine',
+    //   loop: true,
+    //   to: `${obj.getAttribute('position').x + 10} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 10}`,
+    // });
+
+    obj.setAttribute('animation__2', {
+      property: 'rotation',
+      dur: 10000 + Math.random() * 8000,
+      easing: 'linear',
+      loop: true,
+      to: `0 ${obj.getAttribute('rotation').y + 360 * randSign()} 0`,
+    });
+  }, 2000);
+
+  parObj.appendChild(obj);
+
+  return obj;
+} 
