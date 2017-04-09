@@ -8,14 +8,14 @@ AFRAME.registerComponent('water', {
       const scene = document.querySelector('a-scene').object3D;
 
 
-      DEMO.initialize(renderer, camera, scene);
+      water.initialize(renderer, camera, scene);
 
-      entity.setObject3D('meshMirror', DEMO.aMeshMirror);
+      entity.setObject3D('meshMirror', water.aMeshMirror);
     });
   },
 
   tick: function () {
-    DEMO.update();
+    water.update();
   }
 });
 
@@ -42,8 +42,7 @@ AFRAME.registerComponent('glow', {
     const entity = this.el;
 
     const spriteMaterial = new THREE.SpriteMaterial({ 
-      map: new THREE.ImageUtils.loadTexture('./img/glow.png'), 
-      useScreenCoordinates: false, 
+      map: new THREE.TextureLoader().load('./img/glow.png'), 
       color: entity.getAttribute('lantern').light,
       transparent: false,
       blending: THREE.AdditiveBlending,
@@ -79,31 +78,31 @@ AFRAME.registerComponent('lantern', {
   }
 });
 
-AFRAME.registerComponent('partSystem', {
-  schema: {
-    system: {type: 'object'},
-  },
+// AFRAME.registerComponent('partSystem', {
+//   schema: {
+//     system: {type: 'object'},
+//   },
 
-  init: function () {  
-    const entity = this.el;
-    const data = this.data;
+//   init: function () {  
+//     const entity = this.el;
+//     const data = this.data;
 
-    const system = data.system;
-    // let mesh = null;
-    // const material = new THREE.MeshPhongMaterial({
-    //   color: '#423028',
-    //   shading:THREE.FlatShading,
-    // });
-    // const loader = new THREE.JSONLoader();
+//     const system = data.system;
+//     // let mesh = null;
+//     // const material = new THREE.MeshPhongMaterial({
+//     //   color: '#423028',
+//     //   shading:THREE.FlatShading,
+//     // });
+//     // const loader = new THREE.JSONLoader();
 
-    // loader.load('./img/boat.json', function(geometry) {
-    //   mesh = new THREE.Mesh(geometry, material);
+//     // loader.load('./img/boat.json', function(geometry) {
+//     //   mesh = new THREE.Mesh(geometry, material);
 
-    //   entity.setObject3D('boaty', mesh);
-    //});
-  },
+//     //   entity.setObject3D('boaty', mesh);
+//     //});
+//   },
 
-  tick: function (time, timeDelta) {
-    data.system.update(timeDelta);
-  }
-});
+//   tick: function (time, timeDelta) {
+//     data.system.update(timeDelta);
+//   }
+// });

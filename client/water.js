@@ -1,11 +1,60 @@
-/**
- * @author jbouny / https://github.com/jbouny
- *
- * Work based on :
- * @author Slayvin / http://slayvin.net : Flat mirror for three.js
- * @author Stemkoski / http://www.adelphi.edu/~stemkoski : An implementation of water shader based on the flat mirror
- * @author Jonas Wagner / http://29a.ch/ && http://29a.ch/slides/2012/webglwater/ : Water shader explanations in WebGL
- */
+const water = {
+  ms_Renderer: null,
+  ms_Camera: null, 
+  ms_Scene: null, 
+  ms_Water: null,
+  
+  initialize: function initialize(renderer, camera, scene) {
+    
+    // Initialize Renderer, Camera and Scene
+    this.ms_Renderer = renderer;
+    this.ms_Scene = scene;
+    this.ms_Camera = camera;
+  
+    // Add light
+    this.directionalLight = new THREE.DirectionalLight(0xffff55, 1);
+    this.directionalLight.position.set(600, 300, -600);
+
+    // Load textures    
+    var waterNormals = new THREE.TextureLoader().load('./img/waternormals.jpg');
+    waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping; 
+    
+    // Create the water effect
+    this.ms_Water = new THREE.Water(this.ms_Renderer, this.ms_Camera, this.ms_Scene, {
+      textureWidth: 512,
+      textureHeight: 512,
+      waterNormals: waterNormals,
+      alpha:  1.0,
+      sunDirection: this.directionalLight.position.normalize(),
+      sunColor: 0xffffff,
+      waterColor: 0x000000,
+      betaVersion: 0,
+      side: THREE.DoubleSide,
+      distortionScale: 15,
+    });
+    this.aMeshMirror = new THREE.Mesh(
+      new THREE.PlaneBufferGeometry(2000, 2000, 10, 10), 
+      this.ms_Water.material
+    );
+    this.aMeshMirror.add(this.ms_Water);
+    this.aMeshMirror.rotation.x = - Math.PI * 0.5;
+  },
+
+  display: function display() {
+    this.ms_Water.render();
+  },
+  
+  update: function update() {
+    this.ms_Water.material.uniforms.time.value += 1.0 / 360.0;
+    this.display();
+  },
+  
+  resize: function resize(inWidth, inHeight) {
+    this.ms_Renderer.setSize(inWidth, inHeight);
+    this.display();
+  }
+};
+
 
 THREE.ShaderLib['water'] = {
 

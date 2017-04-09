@@ -7,7 +7,7 @@ const system = {
 	velocityBase   : new THREE.Vector3( 0, 0, 0 ),
 	velocitySpread : new THREE.Vector3( 60, 20, 60 ), 
 	
-	particleTexture : THREE.ImageUtils.loadTexture( 'images/spark.png' ),
+	// particleTexture : THREE.ImageUtils.loadTexture( 'images/spark.png' ),
 
 	// sizeBase   : 30.0,
 	// sizeSpread : 2.0,
