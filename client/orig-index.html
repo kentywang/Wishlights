@@ -5,10 +5,13 @@
     <title>Wishlights</title>
     <meta name="description" content="Hello, World! - A-Frame">
     <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
-    <script src="public/aframe-animation-component.min.js"></script>
-    <script src="public/gradientsky.min.js"></script>
-    <script src="render/water.js"></script>
-    <script src="render/particleSystem.js"></script>
+    <script src="../public/app.bundle.js" charset="utf-8"></script>
+    
+    
+    <script src="external/aframe-animation-component.min.js"></script>
+    <script src="external/gradientsky.min.js"></script>
+    <!--<script src="render/water.js"></script>-->
+    <!--<script src="render/particleSystem.js"></script>-->
     <script src="render/utils.js"></script>
     <script src="render/components.js"></script>
     <script src="app.js" defer></script>
@@ -18,6 +21,10 @@
       <a-assets>
         <!-- <img id="sky" src="./img/sky.jpg">       -->
       </a-assets>
+      <!--<a-entity>
+        <a-box color="red" position="0 0 -2"> </a-box> 
+      </a-entity>-->
+
       
       <!-- skybox -->
       <a-gradient-sky 
@@ -27,27 +34,22 @@
       <!-- <a-sky src="#sky"></a-sky> -->
 
       <!-- water (including moonlight reflection) -->
-      <a-entity 
-        water
-      >
-      </a-entity>
+      <!--<a-entity 
+        water>
+      </a-entity>-->
 
       <!-- boat -->
-      <a-entity 
-        boat
-        position="0 .25 0"
-        rotation="0 90 0"
-        scale="0.6 0.5 0.5"
-        animation="property: rotation; dir: alternate; dur: 2000; easing: easeInSine; loop: true; from: -3 90 0; to: 3 90 0"
-      ></a-entity>
+      <a-entity boat>
+
+      </a-entity>
 
       <!-- 
         moonlight on other objects (this light should match in color and position with the water moonlight)
       -->
-      <a-entity
+      <!--<a-entity
         light="type: directional; color: #ffffff; intensity: .5"
         position="600 300 -600">
-      </a-entity> 
+      </a-entity> -->
     </a-scene>
   </body>
 </html>

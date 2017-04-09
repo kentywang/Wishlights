@@ -1,18 +1,18 @@
 // const express = require('express')
 "use strict";
-import express from "express";
+import express from 'express';
+import path from 'path';
 const app = express()
 
+app.use(express.static('public'));
 
+// webpack will serve public/index.html for get '/'
 
-
-
-app.use(express.static('client'));
-
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '../client/index.html'));
+// temp for testing
+app.get('/home', function(req, res) {
+  console.log('here is the dirname', __dirname);
+    res.sendFile(path.join(__dirname + '/../client/index.html'));
 });
-
 
 app.listen(8000, function () {
   console.log('Example app listening on port 8000!')
