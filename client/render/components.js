@@ -1,4 +1,5 @@
-import Utils from './utils'
+import Utils from './utils';
+import water from './water';
 
 AFRAME.registerComponent('water', {
   init: function () {  

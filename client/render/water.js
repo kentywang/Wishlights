@@ -1,4 +1,4 @@
-const water = {
+export default {
   ms_Renderer: null,
   ms_Camera: null, 
   ms_Scene: null, 

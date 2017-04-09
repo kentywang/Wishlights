@@ -9,19 +9,50 @@ import Utils from './render/utils';
 
 
 
-// const scene = document.querySelector('a-scene');
+createScene();
 
-// these are temporary functions that we will use until we implement particle system for lanterns
 createOwnLantern();
-// createOtherLanterns();
+
+createSkyBox();
+
+createWater();
+
+createOtherLanterns();
+
+function createSkyBox(){
+  const sky = document.createElement('a-gradient-sky');
+
+  sky.setAttribute('material', {
+      shader: 'gradient',
+      bottomColor: '23 15 89',
+      topColor: '11 4 25',
+  });
+
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(sky);
+
+}
+
+function createWater(){
+  const water = document.createElement('a-entity');
+
+  water.setAttribute('water', {});
+
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(water);
+
+}
+
+function createScene(){
+  const scene = document.createElement('a-scene');
+  document.body.appendChild(scene);
+}
 
 // let engine = new ParticleEngine();
 // engine.initialize();
 
 function createOwnLantern() {
-  const scene = document.createElement('a-scene');
-  document.body.appendChild(scene);
-
+  const scene = document.querySelector('a-scene');
   const ownParentObject = document.createElement('a-entity');
   const ownObj = document.createElement('a-entity');
   const color = Utils.getRandColor();
@@ -34,7 +65,7 @@ function createOwnLantern() {
   ownObj.setAttribute('position', {
       x: 0,
       y: 1,
-      z: 0,
+      z: -2,
   });
 
   ownObj.setAttribute('rotation', {
@@ -79,6 +110,9 @@ function createOwnLantern() {
 }
 
 function createOtherLanterns() {
+
+  const scene = document.querySelector('a-scene');
+
   const parentObj = document.createElement('a-entity');
 
   for (let i = 0; i < 200; i++) {
@@ -104,15 +138,15 @@ function createOtherLanterns() {
       }); 
     } else if (i < 180) {
       obj.setAttribute('position', {
-        x: getRandCoord(20),
-        y: getRandCoord(15, 1),
-        z: getRandCoord(20),
+        x: Utils.getRandCoord(20),
+        y: Utils.getRandCoord(15, 1),
+        z: Utils.getRandCoord(20),
       }); 
     } else {
       obj.setAttribute('position', {
-        x: getRandCoord(50),
-        y: getRandCoord(30, 1),
-        z: getRandCoord(50),
+        x: Utils.getRandCoord(50),
+        y: Utils.getRandCoord(30, 1),
+        z: Utils.getRandCoord(50),
       }); 
     }
     
@@ -151,7 +185,7 @@ function createOtherLanterns() {
         dur: 10000 + Math.random() * 8000,
         easing: 'linear',
         loop: true,
-        to: `0 ${obj.getAttribute('rotation').y + 360 * randomSign()} 0`,
+        to: `0 ${obj.getAttribute('rotation').y + 360 * Utils.randomSign()} 0`,
       });
     }, 2000);
 

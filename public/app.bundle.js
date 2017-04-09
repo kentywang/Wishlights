@@ -103,131 +103,6 @@ module.exports = g;
 "use strict";
 
 
-!function (modules) {
-  function __webpack_require__(moduleId) {
-    if (installedModules[moduleId]) return installedModules[moduleId].exports;var module = installedModules[moduleId] = { exports: {}, id: moduleId, loaded: !1 };return modules[moduleId].call(module.exports, module, module.exports, __webpack_require__), module.loaded = !0, module.exports;
-  }var installedModules = {};return __webpack_require__.m = modules, __webpack_require__.c = installedModules, __webpack_require__.p = "", __webpack_require__(0);
-}([function (module, exports, __webpack_require__) {
-  var vertexShader = __webpack_require__(2),
-      fragmentShader = __webpack_require__(1);AFRAME.registerShader("gradient", { schema: { topColor: { type: "vec3", default: "255 0 0", is: "uniform" }, bottomColor: { type: "vec3", default: "0 0 255", is: "uniform" }, offset: { type: "float", default: "400", is: "uniform" }, exponent: { type: "float", default: "0.6", is: "uniform" } }, vertexShader: vertexShader, fragmentShader: fragmentShader }), AFRAME.registerPrimitive("a-gradient-sky", { defaultComponents: { geometry: { primitive: "sphere", radius: 5e3, segmentsWidth: 64, segmentsHeight: 20 }, material: { shader: "gradient" }, scale: "-1 1 1" }, mappings: { topColor: "material.topColor", bottomColor: "material.bottomColor", offset: "material.offset", exponent: "material.exponent" } });
-}, function (module, exports) {
-  module.exports = "uniform vec3 bottomColor;\nuniform vec3 topColor;\nuniform float offset;\nuniform float exponent;\nvarying vec3 vWorldPosition;\n\nvoid main() {\n    float h = normalize( vWorldPosition + offset ).y;\n    float rB = bottomColor.x/255.0;\n    float gB = bottomColor.y/255.0;\n    float bB = bottomColor.z/255.0;\n    vec3 bColor = vec3(rB,gB,bB);\n    float rT = topColor.x/255.0;\n    float gT = topColor.y/255.0;\n    float bT = topColor.z/255.0;\n    vec3 tColor = vec3(rT,gT,bT);\n    gl_FragColor = vec4( mix( bColor, tColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );\n}";
-}, function (module, exports) {
-  module.exports = "varying vec3 vWorldPosition;\n\nvoid main() {\n\tvec4 worldPosition = modelMatrix * vec4( position, 1.0 );\n\tvWorldPosition = worldPosition.xyz;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n}";
-}]);
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _utils = __webpack_require__(3);
-
-var _utils2 = _interopRequireDefault(_utils);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-AFRAME.registerComponent('water', {
-  init: function init() {
-    var entity = this.el;
-
-    document.querySelector('a-scene').addEventListener('camera-set-active', function () {
-      var renderer = document.querySelector('a-scene').renderer;
-      var camera = document.querySelector('a-scene').camera;
-      var scene = document.querySelector('a-scene').object3D;
-
-      water.initialize(renderer, camera, scene);
-
-      entity.setObject3D('meshMirror', water.aMeshMirror);
-    });
-  },
-
-  tick: function tick() {
-    water.update();
-  }
-});
-
-AFRAME.registerComponent('boat', {
-  init: function init() {
-    var entity = this.el;
-    var mesh = null;
-    var material = new THREE.MeshPhongMaterial({
-      color: '#423028',
-      shading: THREE.FlatShading
-    });
-    var loader = new THREE.JSONLoader();
-
-    loader.load('./img/boat.json', function (geometry) {
-      mesh = new THREE.Mesh(geometry, material);
-
-      entity.setObject3D('boaty', mesh);
-    });
-  }
-});
-
-AFRAME.registerComponent('glow', {
-  init: function init() {
-    var entity = this.el;
-
-    var spriteMaterial = new THREE.SpriteMaterial({
-      map: new THREE.TextureLoader().load('./img/glow.png'),
-      color: entity.getAttribute('lantern').light,
-      transparent: false,
-      blending: THREE.AdditiveBlending
-    });
-    var sprite = new THREE.Sprite(spriteMaterial);
-    sprite.scale.set(1.2, 1.2, 1.2);
-    sprite.position.set(0, -.1, 0);
-
-    entity.setObject3D('glowy', sprite);
-  }
-});
-
-AFRAME.registerComponent('lantern', {
-  schema: {
-    light: { type: 'number' },
-    dark: { type: 'number' }
-  },
-
-  init: function init() {
-    var data = this.data;
-    var entity = this.el;
-
-    var height = Math.random() / 10 + .25;
-    var width = Math.random() / 10 + .1;
-
-    var mesh = Math.random() > .5 ? _utils2.default.makeGradientCube(data.light, data.dark, width, width, height, .95) : _utils2.default.makeGradientCylinder(data.light, data.dark, width / 2, height / 1.3, .95);
-
-    entity.setObject3D('lant', mesh);
-  }
-});
-
-AFRAME.registerComponent('particle-system', {
-  schema: {
-    system: { type: 'string' }
-  },
-
-  init: function init() {
-    var entity = this.el;
-    var data = this.data;
-
-    var system = data.system;
-  },
-
-  tick: function tick(time, timeDelta) {
-    //data.system.update(timeDelta);
-  }
-});
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, "__esModule", {
 				value: true
 });
@@ -379,13 +254,16 @@ var Utils = function () {
 exports.default = Utils;
 
 /***/ }),
-/* 4 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var water = {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   ms_Renderer: null,
   ms_Camera: null,
   ms_Scene: null,
@@ -438,6 +316,7 @@ var water = {
     this.display();
   }
 };
+
 
 THREE.ShaderLib['water'] = {
 
@@ -700,6 +579,135 @@ THREE.Water.prototype.render = function (isTempTexture) {
     this.material.uniforms.mirrorSampler.value = renderTexture;
   }
 };
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+!function (modules) {
+  function __webpack_require__(moduleId) {
+    if (installedModules[moduleId]) return installedModules[moduleId].exports;var module = installedModules[moduleId] = { exports: {}, id: moduleId, loaded: !1 };return modules[moduleId].call(module.exports, module, module.exports, __webpack_require__), module.loaded = !0, module.exports;
+  }var installedModules = {};return __webpack_require__.m = modules, __webpack_require__.c = installedModules, __webpack_require__.p = "", __webpack_require__(0);
+}([function (module, exports, __webpack_require__) {
+  var vertexShader = __webpack_require__(2),
+      fragmentShader = __webpack_require__(1);AFRAME.registerShader("gradient", { schema: { topColor: { type: "vec3", default: "255 0 0", is: "uniform" }, bottomColor: { type: "vec3", default: "0 0 255", is: "uniform" }, offset: { type: "float", default: "400", is: "uniform" }, exponent: { type: "float", default: "0.6", is: "uniform" } }, vertexShader: vertexShader, fragmentShader: fragmentShader }), AFRAME.registerPrimitive("a-gradient-sky", { defaultComponents: { geometry: { primitive: "sphere", radius: 5e3, segmentsWidth: 64, segmentsHeight: 20 }, material: { shader: "gradient" }, scale: "-1 1 1" }, mappings: { topColor: "material.topColor", bottomColor: "material.bottomColor", offset: "material.offset", exponent: "material.exponent" } });
+}, function (module, exports) {
+  module.exports = "uniform vec3 bottomColor;\nuniform vec3 topColor;\nuniform float offset;\nuniform float exponent;\nvarying vec3 vWorldPosition;\n\nvoid main() {\n    float h = normalize( vWorldPosition + offset ).y;\n    float rB = bottomColor.x/255.0;\n    float gB = bottomColor.y/255.0;\n    float bB = bottomColor.z/255.0;\n    vec3 bColor = vec3(rB,gB,bB);\n    float rT = topColor.x/255.0;\n    float gT = topColor.y/255.0;\n    float bT = topColor.z/255.0;\n    vec3 tColor = vec3(rT,gT,bT);\n    gl_FragColor = vec4( mix( bColor, tColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );\n}";
+}, function (module, exports) {
+  module.exports = "varying vec3 vWorldPosition;\n\nvoid main() {\n\tvec4 worldPosition = modelMatrix * vec4( position, 1.0 );\n\tvWorldPosition = worldPosition.xyz;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n}";
+}]);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _utils = __webpack_require__(1);
+
+var _utils2 = _interopRequireDefault(_utils);
+
+var _water = __webpack_require__(2);
+
+var _water2 = _interopRequireDefault(_water);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+AFRAME.registerComponent('water', {
+  init: function init() {
+    var entity = this.el;
+
+    document.querySelector('a-scene').addEventListener('camera-set-active', function () {
+      var renderer = document.querySelector('a-scene').renderer;
+      var camera = document.querySelector('a-scene').camera;
+      var scene = document.querySelector('a-scene').object3D;
+
+      _water2.default.initialize(renderer, camera, scene);
+
+      entity.setObject3D('meshMirror', _water2.default.aMeshMirror);
+    });
+  },
+
+  tick: function tick() {
+    _water2.default.update();
+  }
+});
+
+AFRAME.registerComponent('boat', {
+  init: function init() {
+    var entity = this.el;
+    var mesh = null;
+    var material = new THREE.MeshPhongMaterial({
+      color: '#423028',
+      shading: THREE.FlatShading
+    });
+    var loader = new THREE.JSONLoader();
+
+    loader.load('./img/boat.json', function (geometry) {
+      mesh = new THREE.Mesh(geometry, material);
+
+      entity.setObject3D('boaty', mesh);
+    });
+  }
+});
+
+AFRAME.registerComponent('glow', {
+  init: function init() {
+    var entity = this.el;
+
+    var spriteMaterial = new THREE.SpriteMaterial({
+      map: new THREE.TextureLoader().load('./img/glow.png'),
+      color: entity.getAttribute('lantern').light,
+      transparent: false,
+      blending: THREE.AdditiveBlending
+    });
+    var sprite = new THREE.Sprite(spriteMaterial);
+    sprite.scale.set(1.2, 1.2, 1.2);
+    sprite.position.set(0, -.1, 0);
+
+    entity.setObject3D('glowy', sprite);
+  }
+});
+
+AFRAME.registerComponent('lantern', {
+  schema: {
+    light: { type: 'number' },
+    dark: { type: 'number' }
+  },
+
+  init: function init() {
+    var data = this.data;
+    var entity = this.el;
+
+    var height = Math.random() / 10 + .25;
+    var width = Math.random() / 10 + .1;
+
+    var mesh = Math.random() > .5 ? _utils2.default.makeGradientCube(data.light, data.dark, width, width, height, .95) : _utils2.default.makeGradientCylinder(data.light, data.dark, width / 2, height / 1.3, .95);
+
+    entity.setObject3D('lant', mesh);
+  }
+});
+
+AFRAME.registerComponent('particle-system', {
+  schema: {
+    system: { type: 'string' }
+  },
+
+  init: function init() {
+    var entity = this.el;
+    var data = this.data;
+
+    var system = data.system;
+  },
+
+  tick: function tick(time, timeDelta) {
+    //data.system.update(timeDelta);
+  }
+});
 
 /***/ }),
 /* 5 */
@@ -8036,31 +8044,60 @@ __webpack_require__(6);
 
 __webpack_require__(5);
 
-__webpack_require__(1);
-
-__webpack_require__(2);
+__webpack_require__(3);
 
 __webpack_require__(4);
 
-var _utils = __webpack_require__(3);
+__webpack_require__(2);
+
+var _utils = __webpack_require__(1);
 
 var _utils2 = _interopRequireDefault(_utils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// const scene = document.querySelector('a-scene');
+createScene();
 
-// these are temporary functions that we will use until we implement particle system for lanterns
 createOwnLantern();
-// createOtherLanterns();
+
+createSkyBox();
+
+createWater();
+
+createOtherLanterns();
+
+function createSkyBox() {
+  var sky = document.createElement('a-gradient-sky');
+
+  sky.setAttribute('material', {
+    shader: 'gradient',
+    bottomColor: '23 15 89',
+    topColor: '11 4 25'
+  });
+
+  var scene = document.querySelector('a-scene');
+  scene.appendChild(sky);
+}
+
+function createWater() {
+  var water = document.createElement('a-entity');
+
+  water.setAttribute('water', {});
+
+  var scene = document.querySelector('a-scene');
+  scene.appendChild(water);
+}
+
+function createScene() {
+  var scene = document.createElement('a-scene');
+  document.body.appendChild(scene);
+}
 
 // let engine = new ParticleEngine();
 // engine.initialize();
 
 function createOwnLantern() {
-  var scene = document.createElement('a-scene');
-  document.body.appendChild(scene);
-
+  var scene = document.querySelector('a-scene');
   var ownParentObject = document.createElement('a-entity');
   var ownObj = document.createElement('a-entity');
   var color = _utils2.default.getRandColor();
@@ -8073,7 +8110,7 @@ function createOwnLantern() {
   ownObj.setAttribute('position', {
     x: 0,
     y: 1,
-    z: 0
+    z: -2
   });
 
   ownObj.setAttribute('rotation', {
@@ -8118,6 +8155,9 @@ function createOwnLantern() {
 }
 
 function createOtherLanterns() {
+
+  var scene = document.querySelector('a-scene');
+
   var parentObj = document.createElement('a-entity');
 
   var _loop = function _loop(i) {
@@ -8143,15 +8183,15 @@ function createOtherLanterns() {
       });
     } else if (i < 180) {
       obj.setAttribute('position', {
-        x: getRandCoord(20),
-        y: getRandCoord(15, 1),
-        z: getRandCoord(20)
+        x: _utils2.default.getRandCoord(20),
+        y: _utils2.default.getRandCoord(15, 1),
+        z: _utils2.default.getRandCoord(20)
       });
     } else {
       obj.setAttribute('position', {
-        x: getRandCoord(50),
-        y: getRandCoord(30, 1),
-        z: getRandCoord(50)
+        x: _utils2.default.getRandCoord(50),
+        y: _utils2.default.getRandCoord(30, 1),
+        z: _utils2.default.getRandCoord(50)
       });
     }
 
@@ -8190,7 +8230,7 @@ function createOtherLanterns() {
         dur: 10000 + Math.random() * 8000,
         easing: 'linear',
         loop: true,
-        to: '0 ' + (obj.getAttribute('rotation').y + 360 * randomSign()) + ' 0'
+        to: '0 ' + (obj.getAttribute('rotation').y + 360 * _utils2.default.randomSign()) + ' 0'
       });
     }, 2000);
 
