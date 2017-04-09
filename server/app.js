@@ -6,6 +6,8 @@ const app = express()
 
 app.use(express.static('public'));
 
+app.use(express.static('client'));
+
 // webpack will serve public/index.html for get '/'
 
 // temp for testing
