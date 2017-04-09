@@ -4,6 +4,9 @@ const scene = document.querySelector('a-scene');
 createOwnLantern();
 createOtherLanterns();
 
+// let engine = new ParticleEngine();
+// engine.initialize();
+
 function createOwnLantern() {
   const ownParentObject = document.createElement('a-entity');
   const ownObj = document.createElement('a-entity');

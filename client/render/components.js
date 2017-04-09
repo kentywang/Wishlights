@@ -78,31 +78,19 @@ AFRAME.registerComponent('lantern', {
   }
 });
 
-// AFRAME.registerComponent('partSystem', {
-//   schema: {
-//     system: {type: 'object'},
-//   },
+AFRAME.registerComponent('particle-system', {
+  schema: {
+    system: {type: 'string'},
+  },
 
-//   init: function () {  
-//     const entity = this.el;
-//     const data = this.data;
+  init: function () {  
+    const entity = this.el;
+    const data = this.data;
 
-//     const system = data.system;
-//     // let mesh = null;
-//     // const material = new THREE.MeshPhongMaterial({
-//     //   color: '#423028',
-//     //   shading:THREE.FlatShading,
-//     // });
-//     // const loader = new THREE.JSONLoader();
+    const system = data.system;
+  },
 
-//     // loader.load('./img/boat.json', function(geometry) {
-//     //   mesh = new THREE.Mesh(geometry, material);
-
-//     //   entity.setObject3D('boaty', mesh);
-//     //});
-//   },
-
-//   tick: function (time, timeDelta) {
-//     data.system.update(timeDelta);
-//   }
-// });
+  tick: function (time, timeDelta) {
+    //data.system.update(timeDelta);
+  }
+});
