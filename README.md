@@ -1,5 +1,5 @@
 # Wishlights
-![](https://github.com/kentywang/wishlights/blob/master/client/img/concept.jpg)
+![](https://github.com/kentywang/wishlights/blob/master/client/img/wishlights.gif)
 
 ## Stack
 - [Express.js](https://expressjs.com/) `4.15.2` to run the Node.js web application
