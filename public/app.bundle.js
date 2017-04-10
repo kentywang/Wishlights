@@ -8066,6 +8066,8 @@ createWater();
 
 createOtherLanterns();
 
+createBoat();
+
 function createSkyBox() {
   var sky = document.createElement('a-gradient-sky');
 
@@ -8077,6 +8079,43 @@ function createSkyBox() {
 
   var scene = document.querySelector('a-scene');
   scene.appendChild(sky);
+}
+
+function createBoat() {
+  var boat = document.createElement('a-entity');
+
+  boat.setAttribute('boat', {});
+
+  boat.setAttribute('position', {
+    x: '0',
+    y: '.25',
+    z: '0'
+  });
+
+  boat.setAttribute('rotation', {
+    x: '0',
+    y: '90',
+    z: '0'
+  });
+
+  boat.setAttribute('scale', {
+    x: '0.6',
+    y: '0.5',
+    z: '0.5'
+  });
+
+  boat.setAttribute('animation', {
+    property: 'rotation',
+    dir: 'alternate',
+    dur: 2000,
+    easing: 'easeInSine',
+    loop: true,
+    from: '-3 90 0',
+    to: '3 90 0'
+  });
+
+  var scene = document.querySelector('a-scene');
+  scene.appendChild(boat);
 }
 
 function createWater() {
@@ -8160,7 +8199,7 @@ function createOtherLanterns() {
 
   var parentObj = document.createElement('a-entity');
 
-  var _loop = function _loop(i) {
+  for (var i = 0; i < 200; i++) {
     var obj = document.createElement('a-entity');
     var color = _utils2.default.getRandColor();
 
@@ -8204,41 +8243,37 @@ function createOtherLanterns() {
     obj.setAttribute('glow', {});
 
     // all lanterns fly in and converge
-    // obj.setAttribute('animation', {
-    //   property: 'position',
-    //   dir: 'alternate',
-    //   dur: 8000,
-    //   easing: 'easeInSine',
-    //   loop: true,
-    //   to: "0 3 -5",
-    // });
+    obj.setAttribute('animation', {
+      property: 'position',
+      dir: 'alternate',
+      dur: 8000,
+      easing: 'easeInSine',
+      loop: true,
+      to: "0 3 -5"
+    });
 
     // all lanterns fly in one direction
     // obviously don't use setTimeout, find proper way to getAttribute once loaded
-    setTimeout(function () {
-      obj.setAttribute('animation', {
-        property: 'position',
-        dir: 'alternate',
-        dur: 10000,
-        easing: 'easeInSine',
-        loop: true,
-        to: obj.getAttribute('position').x + 10 + ' ' + (obj.getAttribute('position').y - 3) + ' ' + (obj.getAttribute('position').z + 10)
-      });
+    // setTimeout(() => {
+    //   obj.setAttribute('animation', {
+    //     property: 'position',
+    //     dir: 'alternate',
+    //     dur: 10000,
+    //     easing: 'easeInSine',
+    //     loop: true,
+    //     to: `${obj.getAttribute('position').x + 10} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 10}`,
+    //   });
 
-      obj.setAttribute('animation__2', {
-        property: 'rotation',
-        dur: 10000 + Math.random() * 8000,
-        easing: 'linear',
-        loop: true,
-        to: '0 ' + (obj.getAttribute('rotation').y + 360 * _utils2.default.randomSign()) + ' 0'
-      });
-    }, 2000);
+    //   obj.setAttribute('animation__2', {
+    //     property: 'rotation',
+    //     dur: 10000 + Math.random() * 8000,
+    //     easing: 'linear',
+    //     loop: true,
+    //     to: `0 ${obj.getAttribute('rotation').y + 360 * Utils.randomSign()} 0`,
+    //   });
+    // }, 2000);
 
     parentObj.appendChild(obj);
-  };
-
-  for (var i = 0; i < 200; i++) {
-    _loop(i);
   }
 
   scene.appendChild(parentObj);
