@@ -10,7 +10,7 @@ import Utils from './render/utils';
 
 createScene();
 
-// createOwnLantern();
+createOwnLantern();
 
 createSkyBox();
 

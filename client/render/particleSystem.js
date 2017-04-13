@@ -22,16 +22,16 @@ export class ParticleEngine {
 		/////////////////////////
 		
 		this.positionStyle = 'cube';
-		this.positionBase   = new THREE.Vector3( 0, 0, 0 );//new THREE.Vector3();
+		this.positionBase   = new THREE.Vector3( 0, 1, 0 );//new THREE.Vector3();
 		// cube shape data
-		this.positionSpread = new THREE.Vector3( 0, 0, 0 );//new THREE.Vector3();
+		this.positionSpread = new THREE.Vector3( 10, 3, 10);//new THREE.Vector3();
 		// sphere shape data
 		this.positionRadius = 0; // distance from base at which particles start
 		
 		this.velocityStyle = 'cube';	
 		// cube movement data
 		this.velocityBase       = new THREE.Vector3( 0, 0, 0 );//new THREE.Vector3();
-		this.velocitySpread     = new THREE.Vector3( 60, 20, 60 );//new THREE.Vector3(); 
+		this.velocitySpread     = new THREE.Vector3( 3, 1, 3 );//new THREE.Vector3(); 
 		// sphere movement data
 		//   direction vector calculated using initial position
 		this.speedBase   = 0;
@@ -48,7 +48,7 @@ export class ParticleEngine {
 		this.angleAccelerationSpread = 0;
 		
 		this.particleArray = [];
-		this.particlesPerSecond = 100; // 100
+		this.particlesPerSecond = 5; // 100
 		this.particleDeathAge = 6.1;
 		
 		////////////////////////
@@ -57,7 +57,7 @@ export class ParticleEngine {
 		
 		this.emitterAge      = 0.0;
 		this.emitterAlive    = true;
-		this.emitterDeathAge = 600; // time (seconds) at which to stop creating particles.
+		this.emitterDeathAge = 60; // time (seconds) at which to stop creating particles.
 		
 		// How many particles could be active at any time?
 		this.particleCount = this.particlesPerSecond * Math.min( this.particleDeathAge, this.emitterDeathAge );
@@ -86,10 +86,12 @@ export class ParticleEngine {
 
 		if (this.positionStyle == 'cube'){
 					//console.log(particle.lantern.object3D);
-			let obj= this.random3vals( this.positionBase, this.positionSpread ); 
-			particle.lantern.object3D.position.x = obj.x;
-			particle.lantern.object3D.position.y = obj.y;
-			particle.lantern.object3D.position.z = obj.z;
+			let obj= this.random3vals( this.positionBase, this.positionSpread );
+			//console.log(obj);
+			particle.lantern.setAttribute('position', {x: obj.x, y: obj.y, z: obj.z}); 
+			// particle.lantern.object3D.position.x = 0//obj.x;
+			// particle.lantern.object3D.position.y = 1//obj.y;
+			// particle.lantern.object3D.position.z = -1//obj.z;
 		}
 			
 		if ( this.velocityStyle == 'cube' )
@@ -102,7 +104,6 @@ export class ParticleEngine {
 		particle.angle = this.randomValue(this.angleBase, this.angleSpread);
 		particle.angleVelocity = this.randomValue( this.angleVelocityBase,this.angleVelocitySpread );
 		particle.angleAcceleration = this.randomValue(this.angleAccelerationBase, this.angleAccelerationSpread );
-
 
 		particle.age   = 0;
 		particle.alive = 0;// particles initialize as inactive
@@ -130,6 +131,7 @@ export class ParticleEngine {
 
 	update(dt)
 	{
+		dt /= 1000;
 		//console.log(this.particleCount)
 		var recycleIndices = [];
 		
@@ -144,6 +146,8 @@ export class ParticleEngine {
 				// could also use: death by size<0 or alpha<0.
 				if ( this.particleArray[i].age > this.particleDeathAge ) 
 				{
+					// console.log('died');
+					this.particleMesh.removeChild(this.particleArray[i].lantern);
 					this.particleArray[i].alive = 0.0;
 					recycleIndices.push(i);
 				}
@@ -200,8 +204,20 @@ export class Particle {
 
 	update(dt)
 	{
-		console.log('lantern',dt)
-		this.lantern.object3D.position.add( this.velocity.clone().multiplyScalar(dt) );
+
+		// console.log('lantern',dt)
+
+		let additionalVelo = this.velocity.clone().multiplyScalar(dt);
+		let origPost = this.lantern.getAttribute('position');
+
+		this.lantern.setAttribute('position',
+			{
+				x: origPost.x + additionalVelo.x,
+				y: origPost.y + additionalVelo.y,
+				z: origPost.z + additionalVelo.z,
+			}
+		);
+
 		this.velocity.add( this.acceleration.clone().multiplyScalar(dt) );
 		
 		// convert from degrees to radians: 0.01745329251 = Math.PI/180
@@ -209,21 +225,7 @@ export class Particle {
 		this.angleVelocity += this.angleAcceleration * 0.01745329251 * dt;
 
 		this.age += dt;
-		
-		// if the tween for a given attribute is nonempty,
-		//  then use it to update the attribute's value
 
-	// 	if ( this.sizeTween.times.length > 0 )
-	// 		this.size = this.sizeTween.lerp( this.age );
-					
-	// 	if ( this.colorTween.times.length > 0 )
-	// 	{
-	// 		var colorHSL = this.colorTween.lerp( this.age );
-	// 		this.color = new THREE.Color().setHSL( colorHSL.x, colorHSL.y, colorHSL.z );
-	// 	}
-		
-	// 	if ( this.opacityTween.times.length > 0 )
-	// 		this.opacity = this.opacityTween.lerp( this.age );
 	}
 
 
