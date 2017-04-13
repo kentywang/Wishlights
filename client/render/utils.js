@@ -1,4 +1,3 @@
-
 export default class Utils {
 static makeGradientCube(c1, c2, w, d, h, opacity){
 	if(typeof opacity === 'undefined')opacity = 1.0;

@@ -5,21 +5,27 @@ import 'aframe-animation-component';
 import './external/gradientsky.min';
 import './render/components';
 import './render/water';
+import { ParticleEngine } from './render/particleSystem';
 import Utils from './render/utils';
-
-
 
 createScene();
 
-createOwnLantern();
+// createOwnLantern();
 
 createSkyBox();
 
 createWater();
 
-createOtherLanterns();
+// createOtherLanterns();
 
 createBoat();
+
+createLanterns();
+
+function createLanterns() {
+  let engine = new ParticleEngine();
+  engine.initialize();
+}
 
 function createSkyBox(){
   const sky = document.createElement('a-gradient-sky');

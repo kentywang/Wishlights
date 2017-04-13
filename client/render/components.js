@@ -89,11 +89,10 @@ AFRAME.registerComponent('particle-system', {
   init: function () {  
     const entity = this.el;
     const data = this.data;
-
-    const system = data.system;
+    
   },
 
   tick: function (time, timeDelta) {
-    //data.system.update(timeDelta);
+    this.el.parent.update(timeDelta);
   }
 });
