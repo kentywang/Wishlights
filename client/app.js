@@ -32,7 +32,7 @@ function createSkyBox(){
 
   sky.setAttribute('material', {
       shader: 'gradient',
-      bottomColor: '23 15 89',
+      bottomColor: '17 7 58',
       topColor: '11 4 25',
   });
 

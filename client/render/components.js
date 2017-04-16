@@ -70,8 +70,8 @@ AFRAME.registerComponent('lantern', {
     const data = this.data;
     const entity = this.el;
 
-    const height = Math.random() / 10 + .25;
-    const width = Math.random() / 10 + .1;
+    const height = Math.random() / 10 + .3;
+    const width = Math.random() / 10 + .15;
 
     const mesh = Math.random() > .5 ? 
       Utils.makeGradientCube(data.light, data.dark, width,width,height, .95) :
