@@ -1,5 +1,6 @@
 // WORK IN PROGRESS
 import Utils from './utils';
+	const particleDeathAge = 12;
 
 	const system = {
 		// SPECS for FIREFLY
@@ -70,9 +71,9 @@ export class ParticleEngine {
 
 
 		this.positionStyle = 'cube';
-		this.positionBase   = new THREE.Vector3( 0, 1, 0 );//new THREE.Vector3();
+		this.positionBase   = new THREE.Vector3( 0, 10, 0 );//new THREE.Vector3();
 		// cube shape data
-		this.positionSpread = new THREE.Vector3( 8, 6, 8);//new THREE.Vector3();
+		this.positionSpread = new THREE.Vector3( 40, 30, 40);//new THREE.Vector3();
 		// sphere shape data
 		this.positionRadius = 0; // distance from base at which particles start
 		
@@ -96,8 +97,8 @@ export class ParticleEngine {
 		this.angleAccelerationSpread = 0;
 		
 		this.particleArray = [];
-		this.particlesPerSecond = 10; // 100
-		this.particleDeathAge = 6;
+		this.particlesPerSecond = 40; // 100
+		this.particleDeathAge = particleDeathAge;
 		
 		////////////////////////
 		// EMITTER PROPERTIES //
@@ -263,7 +264,8 @@ export class Particle {
 		this.angleAcceleration = 0; // degrees per second, per second
 				
 		this.age   = 0;
-		this.alive = 0; // use float instead of boolean for shader purposes	
+		this.alive = 0; // use float instead of boolean for shader purposes
+		this.particleDeathAge = particleDeathAge;
 	}
 
 	update(dt)
@@ -329,6 +331,8 @@ export class Particle {
 	    to: '6 0 0',
     });
 
+	  // probably need event listener like for camera
+  	// http://stackoverflow.com/questions/41419014/how-to-access-the-default-camera-from-a-component
 	  setTimeout(() => {
 	    obj.setAttribute('animation__2', {
 	      property: 'rotation',

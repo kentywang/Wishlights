@@ -10,7 +10,8 @@ import Utils from './render/utils';
 
 createScene();
 
-createOwnLantern();
+
+createBoat();
 
 createSkyBox();
 
@@ -18,11 +19,76 @@ createWater();
 
 // createOtherLanterns();
 
-createBoat();
 
 createLanterns();
 
-// createParticles(); // not working...
+createStars();
+
+createCursor();
+
+// createParticles(); // not working, but not needed
+
+function createCursor() {
+  document.querySelector('a-scene').addEventListener('camera-set-active', function (evt) {
+    // console.log(evt.detail.cameraEl); 
+
+      const camera = evt.detail.cameraEl;
+      //obj.position.set(0, -.5, 2); // doesn't work as expected
+      const obj = document.createElement('a-entity');
+
+      obj.setAttribute('cursor', {fuse: true, fuseTimeout: 5000});
+
+      // reposition camera
+      obj.setAttribute('position', {x: 0, y: 0, z: -1});
+
+      obj.setAttribute('geometry', {
+        primitive: 'ring',
+        radiusInner: 0.015,
+        radiusOuter: 0.02,
+      });
+
+      obj.setAttribute('material', {color: 'white', shader: 'flat'});
+
+      // create a-animation element for click
+      // const anim = document.createElement('a-animation');
+
+      // anim.setAttribute("begin", "click");
+      // anim.setAttribute("easing", "ease-in");
+      // anim.setAttribute("attribute", "scale");
+      // anim.setAttribute("dur", "1000");
+      // anim.setAttribute("fill", "backwards");
+      // anim.setAttribute("from", "0.1 0.1 0.1");
+      // anim.setAttribute("to", "1 1 1");
+
+      // obj.appendChild(anim);
+
+      // another for fusing
+      // currently it's applying even when looking at the boat or water too, get rid of that
+      const anim2 = document.createElement('a-animation');
+
+      anim2.setAttribute("begin", "cursor-fusing");
+      anim2.setAttribute("easing", "ease-in");
+      anim2.setAttribute("attribute", "scale");
+      anim2.setAttribute("dur", "5000");
+      anim2.setAttribute("fill", "forwards");
+      anim2.setAttribute("from", "1 1 1");
+      anim2.setAttribute("to", "0.1 0.1 0.1");
+
+      obj.appendChild(anim2);
+
+      camera.appendChild(obj);
+  });
+}
+
+
+function createStars() {
+  const obj = document.createElement('a-entity');
+
+  obj.setAttribute('stars',{});
+  
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(obj);
+}
 
 function createParticles() {
   const obj = document.createElement('a-entity');
@@ -43,7 +109,7 @@ function createSkyBox(){
 
   sky.setAttribute('material', {
       shader: 'gradient',
-      bottomColor: '17 7 58',
+      bottomColor: '11 4 25',
       topColor: '11 4 25',
   });
 
@@ -52,7 +118,9 @@ function createSkyBox(){
 }
 
 function createBoat(){
+  const boatAndLantern = document.createElement('a-entity');
   const boat = document.createElement('a-entity');
+  boatAndLantern.appendChild(boat);
 
   boat.setAttribute('boat', {});
 
@@ -84,8 +152,10 @@ function createBoat(){
     to: '3 90 0',
   });
 
+  createOwnLantern(boatAndLantern);
+
   const scene = document.querySelector('a-scene');
-  scene.appendChild(boat);
+  scene.appendChild(boatAndLantern);
 
 }
 
@@ -107,9 +177,9 @@ function createScene(){
 // let engine = new ParticleEngine();
 // engine.initialize();
 
-function createOwnLantern() {
-  const scene = document.querySelector('a-scene');
-  const ownParentObject = document.createElement('a-entity');
+function createOwnLantern(ownParentObject) {
+  // const scene = document.querySelector('a-scene');
+  //const ownParentObject = document.createElement('a-entity');
   const ownObj = document.createElement('a-entity');
   const color = Utils.getRandColor();
 
@@ -118,7 +188,7 @@ function createOwnLantern() {
     dark: color.dark
   });
 
-  ownObj.setAttribute('position', '0 1 -2');
+  ownObj.setAttribute('position', '0 .5 -1');
 
   ownObj.setAttribute('rotation', {
       x: 0,
@@ -136,6 +206,10 @@ function createOwnLantern() {
 
   ownObj.setAttribute('glow', {});
 
+  ownObj.setAttribute('cursor-listener', {});
+
+  // probably need event listener like for camera
+  // http://stackoverflow.com/questions/41419014/how-to-access-the-default-camera-from-a-component
   setTimeout(() => {
     ownObj.setAttribute('animation', {
       property: 'position',
@@ -156,7 +230,7 @@ function createOwnLantern() {
   }, 0);
   
   ownParentObject.appendChild(ownObj);
-  scene.appendChild(ownParentObject);
+  //scene.appendChild(ownParentObject);
 }
 
 function createOtherLanterns() {

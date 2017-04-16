@@ -85,11 +85,11 @@ AFRAME.registerComponent('lantern', {
   tick: function () {
     // for fading in and out
     if (this.data.holder) {
-      this.el.object3D.children[0].material.opacity = Utils.expoInOut(this.data.holder.age / 6);
+      this.el.object3D.children[0].material.opacity = Utils.expoInOut(this.data.holder.age / this.data.holder.particleDeathAge);
 
       if (this.el.object3D.children[1].material) {
 
-        this.el.object3D.children[1].material.opacity = Utils.expoInOut(this.data.holder.age / 6);
+        this.el.object3D.children[1].material.opacity = Utils.expoInOut(this.data.holder.age / this.data.holder.particleDeathAge);
       }
     }
   }
@@ -109,4 +109,43 @@ AFRAME.registerComponent('lantern-system', {
   tick: function (time, timeDelta) {
     this.el.parent.update(timeDelta);
   },
+});
+
+AFRAME.registerComponent('stars', {
+  init: function () {
+    const particleCount = 500,
+    particles = new THREE.Geometry(),
+    pMaterial = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 1
+    });
+
+    for (let p = 0; p < particleCount; p++) {
+      const pX = Math.random() * 1000 - 500,
+          pY = Math.random() * 500,
+          pZ = Math.random() * 1000 - 500,
+          particle = new THREE.Vector3(pX, pY, pZ)
+          particle.normalize().multiplyScalar(Math.random() * 1000 + 600)
+      // add it to the geometry
+      particles.vertices.push(particle);
+    }
+
+    // create the particle system
+    const particleSystem = new THREE.Points(
+        particles,
+        pMaterial);
+
+    this.el.setObject3D('stars', particleSystem);
+  }
+});
+
+AFRAME.registerComponent('cursor-listener', {
+  init: function () {
+    // var COLORS = ['red', 'green', 'blue'];
+    this.el.addEventListener('click', function (evt) {
+      // var randomIndex = Math.floor(Math.random() * COLORS.length);
+      // this.setAttribute('material', 'color', COLORS[randomIndex]);
+      console.log('I was clicked at: ', evt.detail.intersection.point);
+    });
+  }
 });
