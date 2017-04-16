@@ -2,17 +2,34 @@
 import Utils from './utils';
 
 	const system = {
-		positionStyle  : 'cube',
-		positionBase   : new THREE.Vector3( 0, 100, 0 ),
-		positionSpread : new THREE.Vector3( 400, 200, 400 ),
+		// SPECS for FIREFLY
+		// positionStyle  : 'cube',
+		// positionBase   : new THREE.Vector3( 0, 100, 0 ),
+		// positionSpread : new THREE.Vector3( 400, 200, 400 ),
 
-		velocityStyle  : 'cube',
-		velocityBase   : new THREE.Vector3( 0, 0, 0 ),
-		velocitySpread : new THREE.Vector3( 60, 20, 60 ), 
+		// velocityStyle  : 'cube',
+		// velocityBase   : new THREE.Vector3( 0, 0, 0 ),
+		// velocitySpread : new THREE.Vector3( 60, 20, 60 ), 
 
-		particlesPerSecond : 20,
-		particleDeathAge   : 6.1,		
-		emitterDeathAge    : 600,
+		// particlesPerSecond : 20,
+		// particleDeathAge   : 6.1,		
+		// emitterDeathAge    : 600,
+
+		// SPECS for FIREWORKS
+		// positionStyle  : 'sphere',
+		// positionBase   : new THREE.Vector3( 0, 1, 0 ),
+		// positionRadius : 10,
+		
+		// velocityStyle  : 'sphere',
+		// speedBase      : 90,
+		// speedSpread    : 10,
+		
+		// accelerationBase : new THREE.Vector3( 0, -80, 0 ),
+		
+		// particlesPerSecond : 3000,
+		// particleDeathAge   : 2.5,		
+		// emitterDeathAge    : 0.2
+
 	};
 export class ParticleEngine {
 	constructor()
@@ -20,11 +37,42 @@ export class ParticleEngine {
 		/////////////////////////
 		// PARTICLE PROPERTIES //
 		/////////////////////////
+	
+		// this.positionStyle = 'sphere';
+		// this.positionBase   = new THREE.Vector3( 0, 30, -30 );//new THREE.Vector3();
+		// // cube shape data
+		// this.positionSpread = new THREE.Vector3( 0,0,0);//new THREE.Vector3();
+		// // sphere shape data
+		// this.positionRadius = 5; // distance from base at which particles start
 		
+		// this.velocityStyle = 'sphere';	
+		// // cube movement data
+		// this.velocityBase       = new THREE.Vector3( 0, 0, 0 );//new THREE.Vector3();
+		// this.velocitySpread     = new THREE.Vector3( 0,0,0 );//new THREE.Vector3(); 
+		// // sphere movement data
+		// //   direction vector calculated using initial position
+		// this.speedBase   = 30;
+		// this.speedSpread = 3;
+		
+		// this.accelerationBase   = new THREE.Vector3(0,-4,0);
+		// this.accelerationSpread = new THREE.Vector3();	
+		
+		// this.angleBase               = 0;
+		// this.angleSpread             = 0;
+		// this.angleVelocityBase       = 0;
+		// this.angleVelocitySpread     = 0;
+		// this.angleAccelerationBase   = 0;
+		// this.angleAccelerationSpread = 0;
+		
+		// this.particleArray = [];
+		// this.particlesPerSecond = 10; // 100
+		// this.particleDeathAge = 6.1;
+
+
 		this.positionStyle = 'cube';
-		this.positionBase   = new THREE.Vector3( 0, 1, 0 );//new THREE.Vector3();
+		this.positionBase   = new THREE.Vector3( 0, 0, 0 );//new THREE.Vector3();
 		// cube shape data
-		this.positionSpread = new THREE.Vector3( 10, 3, 10);//new THREE.Vector3();
+		this.positionSpread = new THREE.Vector3( 5, 5, 5);//new THREE.Vector3();
 		// sphere shape data
 		this.positionRadius = 0; // distance from base at which particles start
 		
@@ -38,7 +86,7 @@ export class ParticleEngine {
 		this.speedSpread = 0;
 		
 		this.accelerationBase   = new THREE.Vector3();
-		this.accelerationSpread = new THREE.Vector3();	
+		this.accelerationSpread = new THREE.Vector3();
 		
 		this.angleBase               = 0;
 		this.angleSpread             = 0;
@@ -48,7 +96,7 @@ export class ParticleEngine {
 		this.angleAccelerationSpread = 0;
 		
 		this.particleArray = [];
-		this.particlesPerSecond = 5; // 100
+		this.particlesPerSecond = 1; // 100
 		this.particleDeathAge = 6.1;
 		
 		////////////////////////
@@ -93,10 +141,26 @@ export class ParticleEngine {
 			// particle.lantern.object3D.position.y = 1//obj.y;
 			// particle.lantern.object3D.position.z = -1//obj.z;
 		}
+
+		if (this.positionStyle == 'sphere') {
+			let z = 2 * Math.random() - 1;
+			let t = 6.2832 * Math.random();
+			let r = Math.sqrt( 1 - z*z );
+			let vec3 = new THREE.Vector3( r * Math.cos(t), r * Math.sin(t), z );
+			let obj = new THREE.Vector3().addVectors( this.positionBase, vec3.multiplyScalar( this.positionRadius ) );
+			particle.lantern.setAttribute('position', {x: obj.x, y: obj.y, z: obj.z}); 
+		}
 			
 		if ( this.velocityStyle == 'cube' )
 		{
 			particle.velocity     = this.randomVector3( this.velocityBase,     this.velocitySpread ); 
+		}
+
+		if ( this.velocityStyle == 'sphere' )
+		{
+			let direction = new THREE.Vector3().subVectors( particle.position, this.positionBase );
+			let speed     = this.randomValue( this.speedBase, this.speedSpread );
+			particle.velocity  = direction.normalize().multiplyScalar( speed );
 		}
 		
 		particle.acceleration = this.randomVector3( this.accelerationBase, this.accelerationSpread ); 
@@ -243,6 +307,7 @@ export class Particle {
 	    y: 0,
 	    z: 0,
 	  }); 
+	  // console.log('test', obj.getAttribute('position').x)
 	  
 	  obj.setAttribute('rotation', {
 	    x: 0,
@@ -252,26 +317,26 @@ export class Particle {
 
 	  obj.setAttribute('glow', {});
 
-	  // setTimeout(() => {
-	  //   // obj.setAttribute('animation', {
-	  //   //   property: 'position',
-	  //   //   dir: 'alternate',
-	  //   //   dur: 10000,
-	  //   //   easing: 'easeInSine',
-	  //   //   loop: true,
-	  //   //   to: `${obj.getAttribute('position').x + 10} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 10}`,
-	  //   // });
-
-	  //   obj.setAttribute('animation__2', {
-	  //     property: 'rotation',
-	  //     dur: 10000 + Math.random() * 8000,
-	  //     easing: 'linear',
-	  //     loop: true,
-	  //     to: `0 ${obj.getAttribute('rotation').y + 360 * randomSign()} 0`,
-	  //   });
-	  // }, 2000);
-
+	  // add lantern to scene (maybe necessary to getAttribute of its components)
 	  parentObject.appendChild(obj);
+
+	  obj.setAttribute('animation', {
+      property: 'rotation',
+	    dir: 'alternate',
+	    dur: 2000 + Math.random() * 1000,
+	    easing: 'easeInSine',
+	    loop: true,
+	    from: '-5 0 0',
+	    to: '5 0 0',
+    });
+
+    // obj.setAttribute('animation__2', {
+    //   property: 'rotation',
+    //   dur: 10000 + Math.random() * 8000,
+    //   easing: 'linear',
+    //   loop: true,
+    //   to: `0 ${obj.getAttribute('rotation').y + 360 * randomSign()} 0`,
+    // });
 
 	  return obj;
 	}

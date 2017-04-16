@@ -114,6 +114,8 @@ function createOwnLantern() {
       z: -2,
   });
 
+  // ownObj.object3D.position = { x: 0, y: 1, z: -2 }
+
   ownObj.setAttribute('rotation', {
       x: 0,
       y: Math.random() * 90,
@@ -130,29 +132,26 @@ function createOwnLantern() {
 
   ownObj.setAttribute('glow', {});
 
-  // obviously don't use setTimeout, find proper way to getAttribute once loaded
-  // setTimeout(() => {
-  //   ownObj.setAttribute('animation', {
-  //     property: 'position',
-  //     dir: 'alternate',
-  //     dur: 2000,
-  //     easing: 'easeInSine',
-  //     loop: true,
-  //     to: `0 ${ownObj.getAttribute('position').y + .5} 0}`,
-  //   });
-
-  //   ownObj.setAttribute('animation__2', {
-  //       property: 'rotation',
-  //       dur: 8000,
-  //       easing: 'linear',
-  //       loop: true,
-  //       to: `0 ${ownObj.getAttribute('rotation').y + 360} 0`,
-  //   });
-  // }, 2000);
-
-  // add lantern to scene
+  // add lantern to scene (maybe necessary to getAttribute of its components)
   ownParentObject.appendChild(ownObj);
   scene.appendChild(ownParentObject);
+
+  // ownObj.setAttribute('animation', {
+  //   property: 'position',
+  //   dir: 'alternate',
+  //   dur: 2000,
+  //   easing: 'easeInSine',
+  //   loop: true,
+  //   to: `0 ${ownObj.getAttribute('position').y + .5} 0}`,
+  // });
+
+  // ownObj.setAttribute('animation__2', {
+  //     property: 'rotation',
+  //     dur: 8000,
+  //     easing: 'linear',
+  //     loop: true,
+  //     to: `0 ${ownObj.getAttribute('rotation').y + 360} 0`,
+  // });
 }
 
 function createOtherLanterns() {
@@ -213,27 +212,6 @@ function createOtherLanterns() {
       loop: true,
       to: "0 3 -5",
     });
-
-    // all lanterns fly in one direction
-    // obviously don't use setTimeout, find proper way to getAttribute once loaded
-    // setTimeout(() => {
-    //   obj.setAttribute('animation', {
-    //     property: 'position',
-    //     dir: 'alternate',
-    //     dur: 10000,
-    //     easing: 'easeInSine',
-    //     loop: true,
-    //     to: `${obj.getAttribute('position').x + 10} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 10}`,
-    //   });
-
-    //   obj.setAttribute('animation__2', {
-    //     property: 'rotation',
-    //     dur: 10000 + Math.random() * 8000,
-    //     easing: 'linear',
-    //     loop: true,
-    //     to: `0 ${obj.getAttribute('rotation').y + 360 * Utils.randomSign()} 0`,
-    //   });
-    // }, 2000);
 
     parentObj.appendChild(obj);
   }

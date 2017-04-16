@@ -45,7 +45,7 @@ static makeGradientCylinder(c1, c2, w, h, opacity){
 	if(typeof c1 === 'number') var lighter = new THREE.Color( c1 );
 	if(typeof c2 === 'number') var darker = new THREE.Color( c2 );
 
-	var cubeGeometry = new THREE.CylinderGeometry(w, w, h, 16, 1);
+	var cubeGeometry = new THREE.CylinderGeometry(w + .01, w, h, 16, 1);
 
 	var cubeMaterial = new THREE.MeshBasicMaterial({
 	    vertexColors:THREE.VertexColors
