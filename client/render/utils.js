@@ -37,7 +37,13 @@ static makeGradientCube(c1, c2, w, d, h, opacity){
 	        }
 	    }
 
-	return new THREE.Mesh(cubeGeometry, cubeMaterial);
+	const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+	const edges = new THREE.EdgesGeometry( cubeGeometry ); // the second parameter solves your problem ;)
+	const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
+	mesh.add( line );
+
+	return mesh;
+
 }
 
 static makeGradientCylinder(c1, c2, w, h, opacity){
@@ -78,7 +84,12 @@ static makeGradientCylinder(c1, c2, w, h, opacity){
 	        }
 	    }
 
-	return new THREE.Mesh(cubeGeometry, cubeMaterial);
+	const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+	const edges = new THREE.EdgesGeometry( cubeGeometry, 60 ); // the second parameter solves your problem ;)
+	const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
+	mesh.add( line );
+
+	return mesh;
 }
 
 static colorLuminance(hex, lum) {

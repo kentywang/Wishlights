@@ -26,10 +26,10 @@ export default {
       waterNormals: waterNormals,
       alpha:  1.0,
       sunDirection: this.directionalLight.position.normalize(),
-      sunColor: 0xffffff,
+      sunColor: 0x151821,
       waterColor: 0x000000,
       betaVersion: 0,
-      side: THREE.DoubleSide,
+      side: THREE.FrontSide,
       distortionScale: 15,
     });
     this.aMeshMirror = new THREE.Mesh(

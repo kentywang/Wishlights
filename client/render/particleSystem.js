@@ -70,9 +70,9 @@ export class ParticleEngine {
 
 
 		this.positionStyle = 'cube';
-		this.positionBase   = new THREE.Vector3( 0, 0, 0 );//new THREE.Vector3();
+		this.positionBase   = new THREE.Vector3( 0, 1, 0 );//new THREE.Vector3();
 		// cube shape data
-		this.positionSpread = new THREE.Vector3( 5, 5, 5);//new THREE.Vector3();
+		this.positionSpread = new THREE.Vector3( 8, 6, 8);//new THREE.Vector3();
 		// sphere shape data
 		this.positionRadius = 0; // distance from base at which particles start
 		
@@ -96,7 +96,7 @@ export class ParticleEngine {
 		this.angleAccelerationSpread = 0;
 		
 		this.particleArray = [];
-		this.particlesPerSecond = 1; // 100
+		this.particlesPerSecond = 10; // 100
 		this.particleDeathAge = 6.1;
 		
 		////////////////////////
@@ -317,8 +317,6 @@ export class Particle {
 
 	  obj.setAttribute('glow', {});
 
-	  // add lantern to scene (maybe necessary to getAttribute of its components)
-	  parentObject.appendChild(obj);
 
 	  obj.setAttribute('animation', {
       property: 'rotation',
@@ -330,13 +328,17 @@ export class Particle {
 	    to: '5 0 0',
     });
 
-    // obj.setAttribute('animation__2', {
-    //   property: 'rotation',
-    //   dur: 10000 + Math.random() * 8000,
-    //   easing: 'linear',
-    //   loop: true,
-    //   to: `0 ${obj.getAttribute('rotation').y + 360 * randomSign()} 0`,
-    // });
+	  setTimeout(() => {
+	    obj.setAttribute('animation__2', {
+	      property: 'rotation',
+	      dur: 12000 + Math.random() * 8000,
+	      easing: 'linear',
+	      loop: true,
+	      to: `0 ${obj.getAttribute('rotation').y + 360 * Utils.randomSign()} 0`,
+	    });
+	  }, 0);
+
+	  parentObject.appendChild(obj);
 
 	  return obj;
 	}

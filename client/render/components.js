@@ -70,7 +70,7 @@ AFRAME.registerComponent('lantern', {
     const data = this.data;
     const entity = this.el;
 
-    const height = Math.random() / 10 + .3;
+    const height = Math.random() / 10 + .32;
     const width = Math.random() / 10 + .15;
 
     const mesh = Math.random() > .5 ? 

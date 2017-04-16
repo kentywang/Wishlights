@@ -108,13 +108,7 @@ function createOwnLantern() {
     dark: color.dark
   });
 
-  ownObj.setAttribute('position', {
-      x: 0,
-      y: 1,
-      z: -2,
-  });
-
-  // ownObj.object3D.position = { x: 0, y: 1, z: -2 }
+  ownObj.setAttribute('position', '0 1 -2');
 
   ownObj.setAttribute('rotation', {
       x: 0,
@@ -132,26 +126,27 @@ function createOwnLantern() {
 
   ownObj.setAttribute('glow', {});
 
-  // add lantern to scene (maybe necessary to getAttribute of its components)
+  setTimeout(() => {
+    ownObj.setAttribute('animation', {
+      property: 'position',
+      dir: 'alternate',
+      dur: 3000,
+      easing: 'easeInSine',
+      loop: true,
+      to: `0 ${ownObj.getAttribute('position').y + .1} ${ownObj.getAttribute('position').z}`,
+    });
+
+    ownObj.setAttribute('animation__2', {
+        property: 'rotation',
+        dur: 12000,
+        easing: 'linear',
+        loop: true,
+        to: `0 ${ownObj.getAttribute('rotation').y + 360} 0`,
+    });
+  }, 0);
+  
   ownParentObject.appendChild(ownObj);
   scene.appendChild(ownParentObject);
-
-  // ownObj.setAttribute('animation', {
-  //   property: 'position',
-  //   dir: 'alternate',
-  //   dur: 2000,
-  //   easing: 'easeInSine',
-  //   loop: true,
-  //   to: `0 ${ownObj.getAttribute('position').y + .5} 0}`,
-  // });
-
-  // ownObj.setAttribute('animation__2', {
-  //     property: 'rotation',
-  //     dur: 8000,
-  //     easing: 'linear',
-  //     loop: true,
-  //     to: `0 ${ownObj.getAttribute('rotation').y + 360} 0`,
-  // });
 }
 
 function createOtherLanterns() {
