@@ -63,7 +63,8 @@ AFRAME.registerComponent('glow', {
 AFRAME.registerComponent('lantern', {
   schema: {
     light: {type: 'number'},
-    dark: {type: 'number'}
+    dark: {type: 'number'},
+    holder: {type: 'string'}
   },
 
   init: function () {  
@@ -78,10 +79,23 @@ AFRAME.registerComponent('lantern', {
       Utils.makeGradientCylinder(data.light, data.dark, width/2,height/1.3, .95);
 
     entity.setObject3D('lant', mesh);
+  },
+
+
+  tick: function () {
+    // for fading in and out
+    if (this.data.holder) {
+      this.el.object3D.children[0].material.opacity = Utils.expoInOut(this.data.holder.age / 6);
+
+      if (this.el.object3D.children[1].material) {
+
+        this.el.object3D.children[1].material.opacity = Utils.expoInOut(this.data.holder.age / 6);
+      }
+    }
   }
 });
 
-AFRAME.registerComponent('particle-system', {
+AFRAME.registerComponent('lantern-system', {
   schema: {
     system: {type: 'string'},
   },
@@ -94,5 +108,5 @@ AFRAME.registerComponent('particle-system', {
 
   tick: function (time, timeDelta) {
     this.el.parent.update(timeDelta);
-  }
+  },
 });

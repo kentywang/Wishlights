@@ -97,7 +97,7 @@ export class ParticleEngine {
 		
 		this.particleArray = [];
 		this.particlesPerSecond = 10; // 100
-		this.particleDeathAge = 6.1;
+		this.particleDeathAge = 6;
 		
 		////////////////////////
 		// EMITTER PROPERTIES //
@@ -113,7 +113,7 @@ export class ParticleEngine {
 
 		// Kenty's addition
 		this.particleMesh = document.createElement('a-entity');
-		this.particleMesh.setAttribute('particle-system', { system });
+		this.particleMesh.setAttribute('lantern-system', { system });
 		this.particleMesh.parent = this;
 		document.querySelector('a-scene').appendChild( this.particleMesh );
 	}
@@ -252,7 +252,7 @@ export class ParticleEngine {
 export class Particle {
 	constructor(parObj)
 	{
-		this.lantern = this.createLantern(parObj);
+		this.lantern = this.createLantern(parObj, this);
 
 		this.position     = new THREE.Vector3();
 		this.velocity     = new THREE.Vector3(); // units per second
@@ -293,13 +293,14 @@ export class Particle {
 	}
 
 
-	createLantern(parentObject) {
+	createLantern(parentObject, holder) {
 	  const obj = document.createElement('a-entity');
 	  const color = Utils.getRandColor();
 
 	  obj.setAttribute('lantern',{
 	    light: color.light,
-	    dark: color.dark
+	    dark: color.dark,
+	    holder
 	  });
 
 	  obj.setAttribute('position', {
@@ -324,8 +325,8 @@ export class Particle {
 	    dur: 2000 + Math.random() * 1000,
 	    easing: 'easeInSine',
 	    loop: true,
-	    from: '-5 0 0',
-	    to: '5 0 0',
+	    from: '-6 0 0',
+	    to: '6 0 0',
     });
 
 	  setTimeout(() => {

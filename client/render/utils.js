@@ -38,9 +38,11 @@ static makeGradientCube(c1, c2, w, d, h, opacity){
 	    }
 
 	const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
-	const edges = new THREE.EdgesGeometry( cubeGeometry ); // the second parameter solves your problem ;)
-	const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
-	mesh.add( line );
+
+	//for edges
+	// const edges = new THREE.EdgesGeometry( cubeGeometry ); 
+	// const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
+	// mesh.add( line );
 
 	return mesh;
 
@@ -85,9 +87,11 @@ static makeGradientCylinder(c1, c2, w, h, opacity){
 	    }
 
 	const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
-	const edges = new THREE.EdgesGeometry( cubeGeometry, 60 ); // the second parameter solves your problem ;)
-	const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
-	mesh.add( line );
+
+	// for edges
+	// const edges = new THREE.EdgesGeometry( cubeGeometry, 60 ); 
+	// const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
+	// mesh.add( line );
 
 	return mesh;
 }
@@ -134,4 +138,16 @@ static getRandColor () {
 
     return color;
 }
+
+static expoInOut(t) {
+  // return t === 1.0 ? t : 1.0 - Math.pow(2.0, -20.0 * t)
+  if (t === 0 || t === 1) return t;
+
+  if (t < 0.5){ 
+  	return 1.0 - Math.pow(2.0, -25.0 * t)
+  } else {
+  	return  1 - Math.pow(2.0, 25.0 * (t - 1.0))
+  }  
+}
+
 }

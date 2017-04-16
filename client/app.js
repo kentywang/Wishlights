@@ -22,6 +22,17 @@ createBoat();
 
 createLanterns();
 
+// createParticles(); // not working...
+
+function createParticles() {
+  const obj = document.createElement('a-entity');
+
+  obj.setAttribute('particle-system', {preset: 'snow', particleCount: 2000});
+
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(obj);
+}
+
 function createLanterns() {
   let engine = new ParticleEngine();
   engine.initialize();
@@ -38,7 +49,6 @@ function createSkyBox(){
 
   const scene = document.querySelector('a-scene');
   scene.appendChild(sky);
-
 }
 
 function createBoat(){
