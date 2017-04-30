@@ -1,4 +1,3 @@
-
 export default class Utils {
 static makeGradientCube(c1, c2, w, d, h, opacity){
 	if(typeof opacity === 'undefined')opacity = 1.0;
@@ -38,7 +37,15 @@ static makeGradientCube(c1, c2, w, d, h, opacity){
 	        }
 	    }
 
-	return new THREE.Mesh(cubeGeometry, cubeMaterial);
+	const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+	//for edges
+	// const edges = new THREE.EdgesGeometry( cubeGeometry ); 
+	// const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
+	// mesh.add( line );
+
+	return mesh;
+
 }
 
 static makeGradientCylinder(c1, c2, w, h, opacity){
@@ -46,7 +53,7 @@ static makeGradientCylinder(c1, c2, w, h, opacity){
 	if(typeof c1 === 'number') var lighter = new THREE.Color( c1 );
 	if(typeof c2 === 'number') var darker = new THREE.Color( c2 );
 
-	var cubeGeometry = new THREE.CylinderGeometry(w, w, h, 16, 1);
+	var cubeGeometry = new THREE.CylinderGeometry(w + .01, w, h, 16, 1);
 
 	var cubeMaterial = new THREE.MeshBasicMaterial({
 	    vertexColors:THREE.VertexColors
@@ -79,7 +86,14 @@ static makeGradientCylinder(c1, c2, w, h, opacity){
 	        }
 	    }
 
-	return new THREE.Mesh(cubeGeometry, cubeMaterial);
+	const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+	// for edges
+	// const edges = new THREE.EdgesGeometry( cubeGeometry, 60 ); 
+	// const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
+	// mesh.add( line );
+
+	return mesh;
 }
 
 static colorLuminance(hex, lum) {
@@ -112,6 +126,16 @@ static randomSign() {
 
 static getRandColor () {
     const colors = [
+    	// new colors (more uniformly orange)
+      // {light: 0xfcbd3f, dark: 0xdb3b00},  // orange
+      // {light: 0xFED178, dark: 0xE0842C},  // yellow
+      // {light: 0xFEB963, dark: 0xED6525},  // light orange
+      // {light: 0xFEC34D, dark: 0xED6522},  // orange-pink
+      // {light: 0xFEBF6D, dark: 0xED6554},  // pink
+      // {light: 0xFEAE77, dark: 0xE14250},  // dark pink
+      // {light: 0xFEBF68, dark: 0xED6233},  // pink-orange
+
+      // old colors
       {light: 0xffe5b0, dark: 0xe5cd57},  // yellow
       {light: 0xffae0c, dark: 0xFF4500},  // orange
       {light: 0xffb587, dark: 0xff8f49},  // light orange
@@ -124,4 +148,16 @@ static getRandColor () {
 
     return color;
 }
+
+static expoInOut(t) {
+  // return t === 1.0 ? t : 1.0 - Math.pow(2.0, -20.0 * t)
+  if (t === 0 || t === 1) return t;
+
+  if (t < 0.5){ 
+  	return 1.0 - Math.pow(2.0, -25.0 * t)
+  } else {
+  	return  1 - Math.pow(2.0, 25.0 * (t - 1.0))
+  }  
+}
+
 }

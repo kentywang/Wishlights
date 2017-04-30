@@ -5,38 +5,27 @@ import 'aframe-animation-component';
 import './external/gradientsky.min';
 import './render/components';
 import './render/water';
+import { ParticleEngine } from './render/particleSystem';
 import Utils from './render/utils';
 
-
-
 createScene();
-
-createOwnLantern();
-
+createBoat(); // we create our lantern here too because it is tied with the boat
 createSkyBox();
-
 createWater();
+// createStars();
+createCursor();
+createOtherLanterns(); // this is old lanterns creation implementation
+// createLanterns();  // this is the particle system lantern implementation
 
-createOtherLanterns();
-
-createBoat();
-
-function createSkyBox(){
-  const sky = document.createElement('a-gradient-sky');
-
-  sky.setAttribute('material', {
-      shader: 'gradient',
-      bottomColor: '23 15 89',
-      topColor: '11 4 25',
-  });
-
-  const scene = document.querySelector('a-scene');
-  scene.appendChild(sky);
-
+function createScene(){
+  const scene = document.createElement('a-scene');
+  document.body.appendChild(scene);
 }
 
 function createBoat(){
+  const boatAndLantern = document.createElement('a-entity');
   const boat = document.createElement('a-entity');
+  boatAndLantern.appendChild(boat);
 
   boat.setAttribute('boat', {});
 
@@ -68,32 +57,13 @@ function createBoat(){
     to: '3 90 0',
   });
 
-  const scene = document.querySelector('a-scene');
-  scene.appendChild(boat);
-
-}
-
-function createWater(){
-  const water = document.createElement('a-entity');
-
-  water.setAttribute('water', {});
+  createOwnLantern(boatAndLantern);
 
   const scene = document.querySelector('a-scene');
-  scene.appendChild(water);
-
+  scene.appendChild(boatAndLantern);
 }
 
-function createScene(){
-  const scene = document.createElement('a-scene');
-  document.body.appendChild(scene);
-}
-
-// let engine = new ParticleEngine();
-// engine.initialize();
-
-function createOwnLantern() {
-  const scene = document.querySelector('a-scene');
-  const ownParentObject = document.createElement('a-entity');
+function createOwnLantern(ownParentObject) {
   const ownObj = document.createElement('a-entity');
   const color = Utils.getRandColor();
 
@@ -102,11 +72,7 @@ function createOwnLantern() {
     dark: color.dark
   });
 
-  ownObj.setAttribute('position', {
-      x: 0,
-      y: 1,
-      z: -2,
-  });
+  ownObj.setAttribute('position', '0 .5 -1');
 
   ownObj.setAttribute('rotation', {
       x: 0,
@@ -124,29 +90,113 @@ function createOwnLantern() {
 
   ownObj.setAttribute('glow', {});
 
-  // obviously don't use setTimeout, find proper way to getAttribute once loaded
-  // setTimeout(() => {
-  //   ownObj.setAttribute('animation', {
-  //     property: 'position',
-  //     dir: 'alternate',
-  //     dur: 2000,
-  //     easing: 'easeInSine',
-  //     loop: true,
-  //     to: `0 ${ownObj.getAttribute('position').y + .5} 0}`,
-  //   });
+  ownObj.setAttribute('cursor-listener', {});
 
-  //   ownObj.setAttribute('animation__2', {
-  //       property: 'rotation',
-  //       dur: 8000,
-  //       easing: 'linear',
-  //       loop: true,
-  //       to: `0 ${ownObj.getAttribute('rotation').y + 360} 0`,
-  //   });
-  // }, 2000);
+  // probably need event listener like for camera
+  // http://stackoverflow.com/questions/41419014/how-to-access-the-default-camera-from-a-component
+  setTimeout(() => {
+    ownObj.setAttribute('animation', {
+      property: 'position',
+      dir: 'alternate',
+      dur: 3000,
+      easing: 'easeInSine',
+      loop: true,
+      to: `0 ${ownObj.getAttribute('position').y + .1} ${ownObj.getAttribute('position').z}`,
+    });
 
-  // add lantern to scene
+    ownObj.setAttribute('animation__2', {
+        property: 'rotation',
+        dur: 12000,
+        easing: 'linear',
+        loop: true,
+        to: `0 ${ownObj.getAttribute('rotation').y + 360} 0`,
+    });
+  }, 0);
+  
   ownParentObject.appendChild(ownObj);
-  scene.appendChild(ownParentObject);
+}
+
+function createSkyBox(){
+  const sky = document.createElement('a-gradient-sky');
+
+  sky.setAttribute('material', {
+      shader: 'gradient',
+      bottomColor: '23 15 89', // old color -- more purpish
+      // bottomColor: '11 4 25', // new color -- more black
+      topColor: '11 4 25',
+  });
+
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(sky);
+}
+
+function createWater(){
+  const water = document.createElement('a-entity');
+
+  water.setAttribute('water', {});
+
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(water);
+
+}
+
+function createStars() {
+  const obj = document.createElement('a-entity');
+
+  obj.setAttribute('stars',{});
+  
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(obj);
+}
+
+function createCursor() {
+  document.querySelector('a-scene').addEventListener('camera-set-active', function (evt) {
+      const camera = evt.detail.cameraEl;
+      //obj.position.set(0, -.5, 2); // doesn't work as expected
+      const obj = document.createElement('a-entity');
+
+      obj.setAttribute('cursor', {fuse: true, fuseTimeout: 5000});
+
+      // reposition camera
+      obj.setAttribute('position', {x: 0, y: 0, z: -1});
+
+      obj.setAttribute('geometry', {
+        primitive: 'ring',
+        radiusInner: 0.015,
+        radiusOuter: 0.02,
+      });
+
+      obj.setAttribute('material', {color: 'white', shader: 'flat'});
+
+      // create a-animation element for click
+      // const anim = document.createElement('a-animation');
+
+      // anim.setAttribute("begin", "click");
+      // anim.setAttribute("easing", "ease-in");
+      // anim.setAttribute("attribute", "scale");
+      // anim.setAttribute("dur", "1000");
+      // anim.setAttribute("fill", "backwards");
+      // anim.setAttribute("from", "0.1 0.1 0.1");
+      // anim.setAttribute("to", "1 1 1");
+
+      // obj.appendChild(anim);
+
+      // another for fusing
+      // currently it's applying even when looking at the boat or water too, get rid of that
+      const anim2 = document.createElement('a-animation');
+
+      anim2.setAttribute("begin", "cursor-fusing");
+      anim2.setAttribute("easing", "ease-in");
+      anim2.setAttribute("attribute", "scale");
+      anim2.setAttribute("dur", "5000");
+      anim2.setAttribute("fill", "forwards");
+      anim2.setAttribute("from", "1 1 1");
+      anim2.setAttribute("to", "0.1 0.1 0.1");
+
+      obj.appendChild(anim2);
+
+      camera.appendChild(obj);
+  });
 }
 
 function createOtherLanterns() {
@@ -208,29 +258,13 @@ function createOtherLanterns() {
       to: "0 3 -5",
     });
 
-    // all lanterns fly in one direction
-    // obviously don't use setTimeout, find proper way to getAttribute once loaded
-    // setTimeout(() => {
-    //   obj.setAttribute('animation', {
-    //     property: 'position',
-    //     dir: 'alternate',
-    //     dur: 10000,
-    //     easing: 'easeInSine',
-    //     loop: true,
-    //     to: `${obj.getAttribute('position').x + 10} ${obj.getAttribute('position').y - 3} ${obj.getAttribute('position').z + 10}`,
-    //   });
-
-    //   obj.setAttribute('animation__2', {
-    //     property: 'rotation',
-    //     dur: 10000 + Math.random() * 8000,
-    //     easing: 'linear',
-    //     loop: true,
-    //     to: `0 ${obj.getAttribute('rotation').y + 360 * Utils.randomSign()} 0`,
-    //   });
-    // }, 2000);
-
     parentObj.appendChild(obj);
   }
 
   scene.appendChild(parentObj);
+}
+
+function createLanterns() {
+  let engine = new ParticleEngine();
+  engine.initialize();
 }
