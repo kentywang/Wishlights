@@ -1,37 +1,41 @@
 // WORK IN PROGRESS
+// todo: add back in all sphere properties for fireworks system
+
 import Utils from './utils';
-	const particleDeathAge = 12;
 
-	const system = {
-		// SPECS for FIREFLY
-		// positionStyle  : 'cube',
-		// positionBase   : new THREE.Vector3( 0, 100, 0 ),
-		// positionSpread : new THREE.Vector3( 400, 200, 400 ),
+const particleDeathAge = 12;
 
-		// velocityStyle  : 'cube',
-		// velocityBase   : new THREE.Vector3( 0, 0, 0 ),
-		// velocitySpread : new THREE.Vector3( 60, 20, 60 ), 
+const system = {
+	// SPECS for FIREFLY
+	// positionStyle  : 'cube',
+	// positionBase   : new THREE.Vector3( 0, 100, 0 ),
+	// positionSpread : new THREE.Vector3( 400, 200, 400 ),
 
-		// particlesPerSecond : 20,
-		// particleDeathAge   : 6.1,		
-		// emitterDeathAge    : 600,
+	// velocityStyle  : 'cube',
+	// velocityBase   : new THREE.Vector3( 0, 0, 0 ),
+	// velocitySpread : new THREE.Vector3( 60, 20, 60 ), 
 
-		// SPECS for FIREWORKS
-		// positionStyle  : 'sphere',
-		// positionBase   : new THREE.Vector3( 0, 1, 0 ),
-		// positionRadius : 10,
-		
-		// velocityStyle  : 'sphere',
-		// speedBase      : 90,
-		// speedSpread    : 10,
-		
-		// accelerationBase : new THREE.Vector3( 0, -80, 0 ),
-		
-		// particlesPerSecond : 3000,
-		// particleDeathAge   : 2.5,		
-		// emitterDeathAge    : 0.2
+	// particlesPerSecond : 20,
+	// particleDeathAge   : 6.1,		
+	// emitterDeathAge    : 600,
 
-	};
+	// SPECS for FIREWORKS
+	// positionStyle  : 'sphere',
+	// positionBase   : new THREE.Vector3( 0, 1, 0 ),
+	// positionRadius : 10,
+	
+	// velocityStyle  : 'sphere',
+	// speedBase      : 90,
+	// speedSpread    : 10,
+	
+	// accelerationBase : new THREE.Vector3( 0, -80, 0 ),
+	
+	// particlesPerSecond : 3000,
+	// particleDeathAge   : 2.5,		
+	// emitterDeathAge    : 0.2
+
+};
+
 export class ParticleEngine {
 	constructor()
 	{
@@ -39,48 +43,17 @@ export class ParticleEngine {
 		// PARTICLE PROPERTIES //
 		/////////////////////////
 	
-		// this.positionStyle = 'sphere';
-		// this.positionBase   = new THREE.Vector3( 0, 30, -30 );//new THREE.Vector3();
-		// // cube shape data
-		// this.positionSpread = new THREE.Vector3( 0,0,0);//new THREE.Vector3();
-		// // sphere shape data
-		// this.positionRadius = 5; // distance from base at which particles start
-		
-		// this.velocityStyle = 'sphere';	
-		// // cube movement data
-		// this.velocityBase       = new THREE.Vector3( 0, 0, 0 );//new THREE.Vector3();
-		// this.velocitySpread     = new THREE.Vector3( 0,0,0 );//new THREE.Vector3(); 
-		// // sphere movement data
-		// //   direction vector calculated using initial position
-		// this.speedBase   = 30;
-		// this.speedSpread = 3;
-		
-		// this.accelerationBase   = new THREE.Vector3(0,-4,0);
-		// this.accelerationSpread = new THREE.Vector3();	
-		
-		// this.angleBase               = 0;
-		// this.angleSpread             = 0;
-		// this.angleVelocityBase       = 0;
-		// this.angleVelocitySpread     = 0;
-		// this.angleAccelerationBase   = 0;
-		// this.angleAccelerationSpread = 0;
-		
-		// this.particleArray = [];
-		// this.particlesPerSecond = 10; // 100
-		// this.particleDeathAge = 6.1;
-
-
 		this.positionStyle = 'cube';
-		this.positionBase   = new THREE.Vector3( 0, 10, 0 );//new THREE.Vector3();
+		this.positionBase   = new THREE.Vector3( 0, 5, 0 ); // 0 10 0
 		// cube shape data
-		this.positionSpread = new THREE.Vector3( 40, 30, 40);//new THREE.Vector3();
+		this.positionSpread = new THREE.Vector3( 20, 15, 20 ); // 40 30 40
 		// sphere shape data
 		this.positionRadius = 0; // distance from base at which particles start
 		
 		this.velocityStyle = 'cube';	
 		// cube movement data
-		this.velocityBase       = new THREE.Vector3( 0, 0, 0 );//new THREE.Vector3();
-		this.velocitySpread     = new THREE.Vector3( 3, 1, 3 );//new THREE.Vector3(); 
+		this.velocityBase       = new THREE.Vector3( 0, 0, 0 );
+		this.velocitySpread     = new THREE.Vector3( 3, 1, 3 );
 		// sphere movement data
 		//   direction vector calculated using initial position
 		this.speedBase   = 0;
@@ -114,7 +87,7 @@ export class ParticleEngine {
 
 		// Kenty's addition
 		this.particleMesh = document.createElement('a-entity');
-		this.particleMesh.setAttribute('lantern-system', { system });
+		this.particleMesh.setAttribute('lantern-system', { system }); // swappable particle systems not yet implemented
 		this.particleMesh.parent = this;
 		document.querySelector('a-scene').appendChild( this.particleMesh );
 	}
@@ -134,13 +107,8 @@ export class ParticleEngine {
 		var particle = new Particle(this.particleMesh);
 
 		if (this.positionStyle == 'cube'){
-					//console.log(particle.lantern.object3D);
 			let obj= this.random3vals( this.positionBase, this.positionSpread );
-			//console.log(obj);
 			particle.lantern.setAttribute('position', {x: obj.x, y: obj.y, z: obj.z}); 
-			// particle.lantern.object3D.position.x = 0//obj.x;
-			// particle.lantern.object3D.position.y = 1//obj.y;
-			// particle.lantern.object3D.position.z = -1//obj.z;
 		}
 
 		if (this.positionStyle == 'sphere') {
@@ -197,7 +165,6 @@ export class ParticleEngine {
 	update(dt)
 	{
 		dt /= 1000;
-		//console.log(this.particleCount)
 		var recycleIndices = [];
 		
 		// update particle data
@@ -211,7 +178,6 @@ export class ParticleEngine {
 				// could also use: death by size<0 or alpha<0.
 				if ( this.particleArray[i].age > this.particleDeathAge ) 
 				{
-					// console.log('died');
 					this.particleMesh.removeChild(this.particleArray[i].lantern);
 					this.particleArray[i].alive = 0.0;
 					recycleIndices.push(i);
@@ -270,9 +236,6 @@ export class Particle {
 
 	update(dt)
 	{
-
-		// console.log('lantern',dt)
-
 		let additionalVelo = this.velocity.clone().multiplyScalar(dt);
 		let origPost = this.lantern.getAttribute('position');
 
@@ -294,7 +257,6 @@ export class Particle {
 
 	}
 
-
 	createLantern(parentObject, holder) {
 	  const obj = document.createElement('a-entity');
 	  const color = Utils.getRandColor();
@@ -310,7 +272,6 @@ export class Particle {
 	    y: 0,
 	    z: 0,
 	  }); 
-	  // console.log('test', obj.getAttribute('position').x)
 	  
 	  obj.setAttribute('rotation', {
 	    x: 0,

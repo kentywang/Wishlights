@@ -14,8 +14,8 @@ createSkyBox();
 createWater();
 // createStars();
 createCursor();
-createOtherLanterns(); // this is old lanterns creation implementation
-// createLanterns();  // this is the particle system lantern implementation
+// createOtherLanterns(); // this is old lanterns creation implementation
+createLanterns();  // this is the particle system lantern implementation
 
 function createScene(){
   const scene = document.createElement('a-scene');
@@ -121,7 +121,8 @@ function createSkyBox(){
 
   sky.setAttribute('material', {
       shader: 'gradient',
-      bottomColor: '11 4 25',
+      bottomColor: '23 15 89', // old color -- more purpish
+      // bottomColor: '11 4 25', // new color -- more black
       topColor: '11 4 25',
   });
 
