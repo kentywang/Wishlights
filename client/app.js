@@ -14,8 +14,8 @@ createSkyBox();
 createWater();
 // createStars();
 createCursor();
-// createOtherLanterns(); // this is old lanterns creation implementation
-createLanterns();  // this is the particle system lantern implementation
+createOtherLanterns(); // this is old lanterns creation implementation
+// createLanterns();  // this is the particle system lantern implementation
 
 function createScene(){
   const scene = document.createElement('a-scene');
