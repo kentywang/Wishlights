@@ -97,7 +97,7 @@ export class ParticleEngine {
 		this.angleAccelerationSpread = 0;
 		
 		this.particleArray = [];
-		this.particlesPerSecond = 40; // 100
+		this.particlesPerSecond = 10; // 40 or 100
 		this.particleDeathAge = particleDeathAge;
 		
 		////////////////////////

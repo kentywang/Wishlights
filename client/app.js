@@ -9,112 +9,17 @@ import { ParticleEngine } from './render/particleSystem';
 import Utils from './render/utils';
 
 createScene();
-
-
-createBoat();
-
+createBoat(); // we create our lantern here too because it is tied with the boat
 createSkyBox();
-
 createWater();
-
-// createOtherLanterns();
-
-
-createLanterns();
-
-createStars();
-
+// createStars();
 createCursor();
+createOtherLanterns(); // this is old lanterns creation implementation
+// createLanterns();  // this is the particle system lantern implementation
 
-// createParticles(); // not working, but not needed
-
-function createCursor() {
-  document.querySelector('a-scene').addEventListener('camera-set-active', function (evt) {
-    // console.log(evt.detail.cameraEl); 
-
-      const camera = evt.detail.cameraEl;
-      //obj.position.set(0, -.5, 2); // doesn't work as expected
-      const obj = document.createElement('a-entity');
-
-      obj.setAttribute('cursor', {fuse: true, fuseTimeout: 5000});
-
-      // reposition camera
-      obj.setAttribute('position', {x: 0, y: 0, z: -1});
-
-      obj.setAttribute('geometry', {
-        primitive: 'ring',
-        radiusInner: 0.015,
-        radiusOuter: 0.02,
-      });
-
-      obj.setAttribute('material', {color: 'white', shader: 'flat'});
-
-      // create a-animation element for click
-      // const anim = document.createElement('a-animation');
-
-      // anim.setAttribute("begin", "click");
-      // anim.setAttribute("easing", "ease-in");
-      // anim.setAttribute("attribute", "scale");
-      // anim.setAttribute("dur", "1000");
-      // anim.setAttribute("fill", "backwards");
-      // anim.setAttribute("from", "0.1 0.1 0.1");
-      // anim.setAttribute("to", "1 1 1");
-
-      // obj.appendChild(anim);
-
-      // another for fusing
-      // currently it's applying even when looking at the boat or water too, get rid of that
-      const anim2 = document.createElement('a-animation');
-
-      anim2.setAttribute("begin", "cursor-fusing");
-      anim2.setAttribute("easing", "ease-in");
-      anim2.setAttribute("attribute", "scale");
-      anim2.setAttribute("dur", "5000");
-      anim2.setAttribute("fill", "forwards");
-      anim2.setAttribute("from", "1 1 1");
-      anim2.setAttribute("to", "0.1 0.1 0.1");
-
-      obj.appendChild(anim2);
-
-      camera.appendChild(obj);
-  });
-}
-
-
-function createStars() {
-  const obj = document.createElement('a-entity');
-
-  obj.setAttribute('stars',{});
-  
-  const scene = document.querySelector('a-scene');
-  scene.appendChild(obj);
-}
-
-function createParticles() {
-  const obj = document.createElement('a-entity');
-
-  obj.setAttribute('particle-system', {preset: 'snow', particleCount: 2000});
-
-  const scene = document.querySelector('a-scene');
-  scene.appendChild(obj);
-}
-
-function createLanterns() {
-  let engine = new ParticleEngine();
-  engine.initialize();
-}
-
-function createSkyBox(){
-  const sky = document.createElement('a-gradient-sky');
-
-  sky.setAttribute('material', {
-      shader: 'gradient',
-      bottomColor: '11 4 25',
-      topColor: '11 4 25',
-  });
-
-  const scene = document.querySelector('a-scene');
-  scene.appendChild(sky);
+function createScene(){
+  const scene = document.createElement('a-scene');
+  document.body.appendChild(scene);
 }
 
 function createBoat(){
@@ -156,30 +61,9 @@ function createBoat(){
 
   const scene = document.querySelector('a-scene');
   scene.appendChild(boatAndLantern);
-
 }
-
-function createWater(){
-  const water = document.createElement('a-entity');
-
-  water.setAttribute('water', {});
-
-  const scene = document.querySelector('a-scene');
-  scene.appendChild(water);
-
-}
-
-function createScene(){
-  const scene = document.createElement('a-scene');
-  document.body.appendChild(scene);
-}
-
-// let engine = new ParticleEngine();
-// engine.initialize();
 
 function createOwnLantern(ownParentObject) {
-  // const scene = document.querySelector('a-scene');
-  //const ownParentObject = document.createElement('a-entity');
   const ownObj = document.createElement('a-entity');
   const color = Utils.getRandColor();
 
@@ -230,7 +114,88 @@ function createOwnLantern(ownParentObject) {
   }, 0);
   
   ownParentObject.appendChild(ownObj);
-  //scene.appendChild(ownParentObject);
+}
+
+function createSkyBox(){
+  const sky = document.createElement('a-gradient-sky');
+
+  sky.setAttribute('material', {
+      shader: 'gradient',
+      bottomColor: '11 4 25',
+      topColor: '11 4 25',
+  });
+
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(sky);
+}
+
+function createWater(){
+  const water = document.createElement('a-entity');
+
+  water.setAttribute('water', {});
+
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(water);
+
+}
+
+function createStars() {
+  const obj = document.createElement('a-entity');
+
+  obj.setAttribute('stars',{});
+  
+  const scene = document.querySelector('a-scene');
+  scene.appendChild(obj);
+}
+
+function createCursor() {
+  document.querySelector('a-scene').addEventListener('camera-set-active', function (evt) {
+      const camera = evt.detail.cameraEl;
+      //obj.position.set(0, -.5, 2); // doesn't work as expected
+      const obj = document.createElement('a-entity');
+
+      obj.setAttribute('cursor', {fuse: true, fuseTimeout: 5000});
+
+      // reposition camera
+      obj.setAttribute('position', {x: 0, y: 0, z: -1});
+
+      obj.setAttribute('geometry', {
+        primitive: 'ring',
+        radiusInner: 0.015,
+        radiusOuter: 0.02,
+      });
+
+      obj.setAttribute('material', {color: 'white', shader: 'flat'});
+
+      // create a-animation element for click
+      // const anim = document.createElement('a-animation');
+
+      // anim.setAttribute("begin", "click");
+      // anim.setAttribute("easing", "ease-in");
+      // anim.setAttribute("attribute", "scale");
+      // anim.setAttribute("dur", "1000");
+      // anim.setAttribute("fill", "backwards");
+      // anim.setAttribute("from", "0.1 0.1 0.1");
+      // anim.setAttribute("to", "1 1 1");
+
+      // obj.appendChild(anim);
+
+      // another for fusing
+      // currently it's applying even when looking at the boat or water too, get rid of that
+      const anim2 = document.createElement('a-animation');
+
+      anim2.setAttribute("begin", "cursor-fusing");
+      anim2.setAttribute("easing", "ease-in");
+      anim2.setAttribute("attribute", "scale");
+      anim2.setAttribute("dur", "5000");
+      anim2.setAttribute("fill", "forwards");
+      anim2.setAttribute("from", "1 1 1");
+      anim2.setAttribute("to", "0.1 0.1 0.1");
+
+      obj.appendChild(anim2);
+
+      camera.appendChild(obj);
+  });
 }
 
 function createOtherLanterns() {
@@ -296,4 +261,9 @@ function createOtherLanterns() {
   }
 
   scene.appendChild(parentObj);
+}
+
+function createLanterns() {
+  let engine = new ParticleEngine();
+  engine.initialize();
 }

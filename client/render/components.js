@@ -58,8 +58,6 @@ AFRAME.registerComponent('glow', {
   }
 });
  
-
- 
 AFRAME.registerComponent('lantern', {
   schema: {
     light: {type: 'number'},
