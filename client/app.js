@@ -7,6 +7,14 @@ import './render/components';
 import './render/water';
 import { ParticleEngine } from './render/particleSystem';
 import Utils from './render/utils';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Application from './react/Application.jsx';
+
+ReactDOM.render(
+  <Application />, 
+  document.getElementById('app')
+);
 
 createScene();
 createBoat(); // we create our lantern here too because it is tied with the boat
@@ -19,7 +27,7 @@ createOtherLanterns(); // this is old lanterns creation implementation
 
 function createScene(){
   const scene = document.createElement('a-scene');
-  document.body.appendChild(scene);
+  document.getElementById('vr').appendChild(scene);
 }
 
 function createBoat(){
