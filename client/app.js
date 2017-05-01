@@ -1,12 +1,20 @@
 'use strict';
 
 import 'aframe';
+import io from 'socket.io-client';
 import 'aframe-animation-component';
 import './external/gradientsky.min';
 import './render/components';
 import './render/water';
 import { ParticleEngine } from './render/particleSystem';
 import Utils from './render/utils';
+
+const socket = io.connect(document.location.protocol+'//'+document.location.host);
+
+
+socket.on('connect', function(){console.log("aniii")});
+socket.on('event', function(data){});
+socket.on('disconnect', function(){});
 
 createScene();
 createBoat(); // we create our lantern here too because it is tied with the boat
