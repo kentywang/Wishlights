@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import buildGame from '../game'
 
-export default class Application extends Component(){
+export default class Application extends Component{
   constructor (props) {
     super(props);
 
@@ -13,6 +14,8 @@ export default class Application extends Component(){
 
   handleClick() {
     this.setState({loaded: true});
+
+    setTimeout(buildGame, 0); // find better approach
   }
 
   render() {
@@ -21,11 +24,10 @@ export default class Application extends Component(){
         {
           !this.state.loaded ?
           <div onClick={this.handleClick}>
-          Aiya
+          Wish!
           </div> :
-          null
+          <div id="vr" />
         }
-        { this.state.loaded ? <div id="vr" /> : null }
       </div>
     );
   }
