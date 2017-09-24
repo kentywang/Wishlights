@@ -1,10 +1,14 @@
 # Wishlights
+
+### 🏮 Lantern festival in VR
 ![](https://github.com/kentywang/wishlights/blob/master/client/img/lanterns.gif)
+
+A visual demonstation of WebVR using our custom-made scene.
 
 ## Stack
 - [Express.js](https://expressjs.com/) `4.15.2` to run the Node.js web application
 - [Nodemon](http://nodemon.io/) `1.11.0` to monitor for any changes in the source and automatically restart the server
-- [A-Frame](https://expressjs.com/en/resources/middleware/morgan.html) `1.7.0` to log HTTP requests for node.js
+- [A-Frame](https://aframe.io/) as the VR framework
 
 ## For Developers
 ### Requirements
