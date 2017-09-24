@@ -3,7 +3,7 @@
 ### 🏮 Lantern festival in VR
 ![](https://github.com/kentywang/wishlights/blob/master/client/img/lanterns.gif)
 
-A visual demonstation of WebVR using our custom-made scene.
+A visual demonstation of WebVR using our custom-made scene. Inspired by [this scene](https://www.youtube.com/watch?v=fKPK6c0mKE0) from a Disney movie. 
 
 ## Stack
 - [Express.js](https://expressjs.com/) `4.15.2` to run the Node.js web application
