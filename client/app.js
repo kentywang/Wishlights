@@ -10,7 +10,7 @@ import Utils from './render/utils';
 
 
 
-createScene();
+// createScene();
 createBoat(); // we create our lantern here too because it is tied with the boat
 createSkyBox();
 createWater();
@@ -22,7 +22,7 @@ createLanterns();  // this is the particle system lantern implementation
 
 function createScene(){
   const scene = document.createElement('a-scene');
-  document.getElementById('app').appendChild(scene);
+  document.getElementById('ascene').appendChild(scene);
 }
 
 function createBoat(){
