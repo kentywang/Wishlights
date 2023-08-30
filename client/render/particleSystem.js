@@ -13,25 +13,25 @@ const system = {
 
 	// velocityStyle  : 'cube',
 	// velocityBase   : new THREE.Vector3( 0, 0, 0 ),
-	// velocitySpread : new THREE.Vector3( 60, 20, 60 ), 
+	// velocitySpread : new THREE.Vector3( 60, 20, 60 ),
 
 	// particlesPerSecond : 20,
-	// particleDeathAge   : 6.1,		
+	// particleDeathAge   : 6.1,
 	// emitterDeathAge    : 600,
 
 	// SPECS for FIREWORKS
 	// positionStyle  : 'sphere',
 	// positionBase   : new THREE.Vector3( 0, 1, 0 ),
 	// positionRadius : 10,
-	
+
 	// velocityStyle  : 'sphere',
 	// speedBase      : 90,
 	// speedSpread    : 10,
-	
+
 	// accelerationBase : new THREE.Vector3( 0, -80, 0 ),
-	
+
 	// particlesPerSecond : 3000,
-	// particleDeathAge   : 2.5,		
+	// particleDeathAge   : 2.5,
 	// emitterDeathAge    : 0.2
 
 };
@@ -42,15 +42,15 @@ export class ParticleEngine {
 		/////////////////////////
 		// PARTICLE PROPERTIES //
 		/////////////////////////
-	
+
 		this.positionStyle = 'cube';
 		this.positionBase   = new THREE.Vector3( 0, 5, 0 ); // 0 10 0
 		// cube shape data
 		this.positionSpread = new THREE.Vector3( 20, 15, 20 ); // 40 30 40
 		// sphere shape data
 		this.positionRadius = 0; // distance from base at which particles start
-		
-		this.velocityStyle = 'cube';	
+
+		this.velocityStyle = 'cube';
 		// cube movement data
 		this.velocityBase       = new THREE.Vector3( 0, 0, 0 );
 		this.velocitySpread     = new THREE.Vector3( 3, 1, 3 );
@@ -58,29 +58,29 @@ export class ParticleEngine {
 		//   direction vector calculated using initial position
 		this.speedBase   = 0;
 		this.speedSpread = 0;
-		
+
 		this.accelerationBase   = new THREE.Vector3();
 		this.accelerationSpread = new THREE.Vector3();
-		
+
 		this.angleBase               = 0;
 		this.angleSpread             = 0;
 		this.angleVelocityBase       = 0;
 		this.angleVelocitySpread     = 0;
 		this.angleAccelerationBase   = 0;
 		this.angleAccelerationSpread = 0;
-		
+
 		this.particleArray = [];
 		this.particlesPerSecond = 10; // 40 or 100
 		this.particleDeathAge = particleDeathAge;
-		
+
 		////////////////////////
 		// EMITTER PROPERTIES //
 		////////////////////////
-		
+
 		this.emitterAge      = 0.0;
 		this.emitterAlive    = true;
-		this.emitterDeathAge = 60; // time (seconds) at which to stop creating particles.
-		
+		this.emitterDeathAge = 1000; // time (seconds) at which to stop creating particles.
+
 		// How many particles could be active at any time?
 		this.particleCount = this.particlesPerSecond * Math.min( this.particleDeathAge, this.emitterDeathAge );
 
@@ -99,7 +99,7 @@ export class ParticleEngine {
 		{
 			this.particleArray[i] = this.createParticle();
 		}
-		
+
 	}
 
 	createParticle()
@@ -108,7 +108,7 @@ export class ParticleEngine {
 
 		if (this.positionStyle == 'cube'){
 			let obj= this.random3vals( this.positionBase, this.positionSpread );
-			particle.lantern.setAttribute('position', {x: obj.x, y: obj.y, z: obj.z}); 
+			particle.lantern.setAttribute('position', {x: obj.x, y: obj.y, z: obj.z});
 		}
 
 		if (this.positionStyle == 'sphere') {
@@ -117,12 +117,12 @@ export class ParticleEngine {
 			let r = Math.sqrt( 1 - z*z );
 			let vec3 = new THREE.Vector3( r * Math.cos(t), r * Math.sin(t), z );
 			let obj = new THREE.Vector3().addVectors( this.positionBase, vec3.multiplyScalar( this.positionRadius ) );
-			particle.lantern.setAttribute('position', {x: obj.x, y: obj.y, z: obj.z}); 
+			particle.lantern.setAttribute('position', {x: obj.x, y: obj.y, z: obj.z});
 		}
-			
+
 		if ( this.velocityStyle == 'cube' )
 		{
-			particle.velocity     = this.randomVector3( this.velocityBase,     this.velocitySpread ); 
+			particle.velocity     = this.randomVector3( this.velocityBase,     this.velocitySpread );
 		}
 
 		if ( this.velocityStyle == 'sphere' )
@@ -131,8 +131,8 @@ export class ParticleEngine {
 			let speed     = this.randomValue( this.speedBase, this.speedSpread );
 			particle.velocity  = direction.normalize().multiplyScalar( speed );
 		}
-		
-		particle.acceleration = this.randomVector3( this.accelerationBase, this.accelerationSpread ); 
+
+		particle.acceleration = this.randomVector3( this.accelerationBase, this.accelerationSpread );
 
 		particle.angle = this.randomValue(this.angleBase, this.angleSpread);
 		particle.angleVelocity = this.randomValue( this.angleVelocityBase,this.angleVelocitySpread );
@@ -140,7 +140,7 @@ export class ParticleEngine {
 
 		particle.age   = 0;
 		particle.alive = 0;// particles initialize as inactive
-		
+
 		return particle;
 	}
 
@@ -166,23 +166,22 @@ export class ParticleEngine {
 	{
 		dt /= 1000;
 		var recycleIndices = [];
-		
+
 		// update particle data
 		for (var i = 0; i < this.particleCount; i++)
 		{
-			if ( this.particleArray[i].alive )
+			if ( this.particleArray[i].alive > 0.0 )
 			{
 				this.particleArray[i].update(dt);
 
 				// check if particle should expire
 				// could also use: death by size<0 or alpha<0.
-				if ( this.particleArray[i].age > this.particleDeathAge ) 
+				if ( this.particleArray[i].age > this.particleDeathAge )
 				{
-					this.particleMesh.removeChild(this.particleArray[i].lantern);
 					this.particleArray[i].alive = 0.0;
 					recycleIndices.push(i);
 				}
-			}		
+			}
 		}
 
 		// check if particle emitter is still running
@@ -194,17 +193,20 @@ export class ParticleEngine {
 			// determine indices of particles to activate
 			var startIndex = Math.round( this.particlesPerSecond * (this.emitterAge +  0) );
 			var   endIndex = Math.round( this.particlesPerSecond * (this.emitterAge + dt) );
-			if  ( endIndex > this.particleCount ) 
-				  endIndex = this.particleCount; 
-				  
+			if  ( endIndex > this.particleCount )
+				  endIndex = this.particleCount;
+
 			for (var i = startIndex; i < endIndex; i++)
-				this.particleArray[i].alive = 1.0;		
+				this.particleArray[i].alive = 1.0;
 		}
 
 		// if any particles have died while the emitter is still running, we imediately recycle them
 		for (var j = 0; j < recycleIndices.length; j++)
 		{
 			var i = recycleIndices[j];
+
+			this.cleanupParticle(this.particleArray[i])
+
 			this.particleArray[i] = this.createParticle();
 			this.particleArray[i].alive = 1.0; // activate right away
 			// this.particleGeometry.vertices[i] = this.particleArray[i].position;
@@ -215,11 +217,15 @@ export class ParticleEngine {
 		if ( this.emitterAge > this.emitterDeathAge )  this.emitterAlive = false;
 	}
 
+	cleanupParticle(particle) {
+		this.particleMesh.removeChild(particle.lantern);
+	}
 }
+
 export class Particle {
-	constructor(parObj)
+	constructor(particleMesh)
 	{
-		this.lantern = this.createLantern(parObj, this);
+		this.lantern = this.createLantern(particleMesh, this);
 
 		this.position     = new THREE.Vector3();
 		this.velocity     = new THREE.Vector3(); // units per second
@@ -228,7 +234,7 @@ export class Particle {
 		this.angle             = 0;
 		this.angleVelocity     = 0; // degrees per second
 		this.angleAcceleration = 0; // degrees per second, per second
-				
+
 		this.age   = 0;
 		this.alive = 0; // use float instead of boolean for shader purposes
 		this.particleDeathAge = particleDeathAge;
@@ -238,17 +244,18 @@ export class Particle {
 	{
 		let additionalVelo = this.velocity.clone().multiplyScalar(dt);
 		let origPost = this.lantern.getAttribute('position');
-
-		this.lantern.setAttribute('position',
-			{
-				x: origPost.x + additionalVelo.x,
-				y: origPost.y + additionalVelo.y,
-				z: origPost.z + additionalVelo.z,
-			}
-		);
+		if (origPost) {
+			this.lantern.setAttribute('position',
+				{
+					x: origPost.x + additionalVelo.x,
+					y: origPost.y + additionalVelo.y,
+					z: origPost.z + additionalVelo.z,
+				}
+			);
+		}
 
 		this.velocity.add( this.acceleration.clone().multiplyScalar(dt) );
-		
+
 		// convert from degrees to radians: 0.01745329251 = Math.PI/180
 		this.angle         += this.angleVelocity     * 0.01745329251 * dt;
 		this.angleVelocity += this.angleAcceleration * 0.01745329251 * dt;
@@ -271,8 +278,8 @@ export class Particle {
 	    x: 0,
 	    y: 0,
 	    z: 0,
-	  }); 
-	  
+	  });
+
 	  obj.setAttribute('rotation', {
 	    x: 0,
 	    y: Math.random() * 90,
@@ -295,13 +302,15 @@ export class Particle {
 	  // probably need event listener like for camera
   	// http://stackoverflow.com/questions/41419014/how-to-access-the-default-camera-from-a-component
 	  setTimeout(() => {
-	    obj.setAttribute('animation__2', {
-	      property: 'rotation',
-	      dur: 12000 + Math.random() * 8000,
-	      easing: 'linear',
-	      loop: true,
-	      to: `0 ${obj.getAttribute('rotation').y + 360 * Utils.randomSign()} 0`,
-	    });
+		  if (obj.getAttribute('rotation')) {
+			obj.setAttribute('animation__2', {
+			  property: 'rotation',
+			  dur: 12000 + Math.random() * 8000,
+			  easing: 'linear',
+			  loop: true,
+			  to: `0 ${obj.getAttribute('rotation').y + 360 * Utils.randomSign()} 0`,
+			});
+		  }
 	  }, 0);
 
 	  parentObject.appendChild(obj);

@@ -15,7 +15,7 @@ createBoat(); // we create our lantern here too because it is tied with the boat
 createSkyBox();
 createWater();
 createStars();
-createCursor();
+// createCursor();
 // createOtherLanterns(); // this is old lanterns creation implementation
 createLanterns();  // this is the particle system lantern implementation
 
