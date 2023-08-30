@@ -23,10 +23,7 @@
   "dependencies": {
     "aframe": "^0.5.0",
     "aframe-animation-component": "^3.2.5",
-    "express": "^4.15.2",
-    "socket.io": "^1.7.3",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "express": "^4.15.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
