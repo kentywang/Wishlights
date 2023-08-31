@@ -16,7 +16,7 @@ const water = {
     this.directionalLight.position.set(600, 300, -600);
 
     // Load textures
-    var waterNormals = new THREE.TextureLoader().load('./img/waternormals.jpg');
+    var waterNormals = new THREE.TextureLoader().load('waternormals.jpg');
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 
     // Create the water effect
@@ -86,7 +86,7 @@ AFRAME.registerComponent('boat', {
     });
     const loader = new THREE.JSONLoader();
 
-    loader.load('./img/boat.json', function(geometry) {
+    loader.load('boat.json', function(geometry) {
       mesh = new THREE.Mesh(geometry, material);
 
       entity.setObject3D('boaty', mesh);
@@ -99,7 +99,7 @@ AFRAME.registerComponent('glow', {
     const entity = this.el;
 
     const spriteMaterial = new THREE.SpriteMaterial({
-      map: new THREE.TextureLoader().load('./img/glow.png'),
+      map: new THREE.TextureLoader().load('glow.png'),
       color: entity.getAttribute('lantern').light,
       transparent: false,
       blending: THREE.AdditiveBlending,
