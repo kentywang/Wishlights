@@ -1,15 +1,5 @@
 'use strict';
 
-import 'aframe';
-import 'aframe-animation-component';
-import './external/gradientsky.min';
-import './render/components';
-import './render/water';
-import { ParticleEngine } from './render/particleSystem';
-import Utils from './render/utils';
-
-
-
 // createScene();
 createBoat(); // we create our lantern here too because it is tied with the boat
 createSkyBox();
@@ -62,7 +52,7 @@ function createBoat(){
 
   createOwnLantern(boatAndLantern);
 
-  const scene = document.querySelector('a-scene');
+  const scene = document.getElementById('ascene');
   scene.appendChild(boatAndLantern);
 }
 
@@ -129,7 +119,7 @@ function createSkyBox(){
       topColor: '11 4 25',
   });
 
-  const scene = document.querySelector('a-scene');
+  const scene = document.getElementById('ascene');
   scene.appendChild(sky);
 }
 
@@ -138,7 +128,7 @@ function createWater(){
 
   water.setAttribute('water', {});
 
-  const scene = document.querySelector('a-scene');
+  const scene = document.getElementById('ascene');
   scene.appendChild(water);
 
 }
@@ -148,12 +138,12 @@ function createStars() {
 
   obj.setAttribute('stars',{});
 
-  const scene = document.querySelector('a-scene');
+  const scene = document.getElementById('ascene');
   scene.appendChild(obj);
 }
 
 function createCursor() {
-  document.querySelector('a-scene').addEventListener('camera-set-active', function (evt) {
+  document.getElementById('ascene').addEventListener('camera-set-active', function (evt) {
       const camera = evt.detail.cameraEl;
       //obj.position.set(0, -.5, 2); // doesn't work as expected
       const obj = document.createElement('a-entity');
@@ -204,7 +194,7 @@ function createCursor() {
 
 function createOtherLanterns() {
 
-  const scene = document.querySelector('a-scene');
+  const scene = document.getElementById('ascene');
 
   const parentObj = document.createElement('a-entity');
 

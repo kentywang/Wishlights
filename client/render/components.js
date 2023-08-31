@@ -1,8 +1,62 @@
-import Utils from './utils';
-import water from './water';
+const water = {
+  ms_Renderer: null,
+  ms_Camera: null,
+  ms_Scene: null,
+  ms_Water: null,
+
+  initialize: function initialize(renderer, camera, scene) {
+
+    // Initialize Renderer, Camera and Scene
+    this.ms_Renderer = renderer;
+    this.ms_Scene = scene;
+    this.ms_Camera = camera;
+
+    // Add light
+    this.directionalLight = new THREE.DirectionalLight(0xffff55, 1);
+    this.directionalLight.position.set(600, 300, -600);
+
+    // Load textures
+    var waterNormals = new THREE.TextureLoader().load('./img/waternormals.jpg');
+    waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+
+    // Create the water effect
+    this.ms_Water = new THREE.Water(this.ms_Renderer, this.ms_Camera, this.ms_Scene, {
+      textureWidth: 512,
+      textureHeight: 512,
+      waterNormals: waterNormals,
+      alpha:  1.0,
+      sunDirection: this.directionalLight.position.normalize(),
+      sunColor: 0x151821,
+      waterColor: 0x000000,
+      betaVersion: 0,
+      side: THREE.FrontSide,
+      distortionScale: 15,
+    });
+    this.aMeshMirror = new THREE.Mesh(
+      new THREE.PlaneBufferGeometry(2000, 2000, 10, 10),
+      this.ms_Water.material
+    );
+    this.aMeshMirror.add(this.ms_Water);
+    this.aMeshMirror.rotation.x = - Math.PI * 0.5;
+  },
+
+  display: function display() {
+    this.ms_Water.render();
+  },
+
+  update: function update() {
+    this.ms_Water.material.uniforms.time.value += 1.0 / 360.0;
+    this.display();
+  },
+
+  resize: function resize(inWidth, inHeight) {
+    this.ms_Renderer.setSize(inWidth, inHeight);
+    this.display();
+  }
+};
 
 AFRAME.registerComponent('water', {
-  init: function () {  
+  init: function () {
     const entity = this.el;
 
     document.querySelector('a-scene').addEventListener('camera-set-active', function () {
@@ -23,7 +77,7 @@ AFRAME.registerComponent('water', {
 });
 
 AFRAME.registerComponent('boat', {
-  init: function () {  
+  init: function () {
     const entity = this.el;
     let mesh = null;
     const material = new THREE.MeshPhongMaterial({
@@ -39,13 +93,13 @@ AFRAME.registerComponent('boat', {
     });
   }
 });
- 
+
 AFRAME.registerComponent('glow', {
-  init: function () {  
+  init: function () {
     const entity = this.el;
 
-    const spriteMaterial = new THREE.SpriteMaterial({ 
-      map: new THREE.TextureLoader().load('./img/glow.png'), 
+    const spriteMaterial = new THREE.SpriteMaterial({
+      map: new THREE.TextureLoader().load('./img/glow.png'),
       color: entity.getAttribute('lantern').light,
       transparent: false,
       blending: THREE.AdditiveBlending,
@@ -57,7 +111,7 @@ AFRAME.registerComponent('glow', {
     entity.setObject3D('glowy', sprite);
   }
 });
- 
+
 AFRAME.registerComponent('lantern', {
   schema: {
     light: {type: 'number'},
@@ -65,14 +119,14 @@ AFRAME.registerComponent('lantern', {
     holder: {type: 'string'}
   },
 
-  init: function () {  
+  init: function () {
     const data = this.data;
     const entity = this.el;
 
     const height = Math.random() / 10 + .32;
     const width = Math.random() / 10 + .15;
 
-    const mesh = Math.random() > .5 ? 
+    const mesh = Math.random() > .5 ?
       Utils.makeGradientCube(data.light, data.dark, width,width,height, .95) :
       Utils.makeGradientCylinder(data.light, data.dark, width/2,height/1.3, .95);
 
@@ -98,10 +152,10 @@ AFRAME.registerComponent('lantern-system', {
     system: {type: 'string'},
   },
 
-  init: function () {  
+  init: function () {
     const entity = this.el;
     const data = this.data;
-    
+
   },
 
   tick: function (time, timeDelta) {

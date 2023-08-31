@@ -1,4 +1,4 @@
-export default class Utils {
+class Utils {
 static makeGradientCube(c1, c2, w, d, h, opacity){
 	if(typeof opacity === 'undefined')opacity = 1.0;
 	if(typeof c1 === 'number') var lighter = new THREE.Color( c1 );
@@ -40,7 +40,7 @@ static makeGradientCube(c1, c2, w, d, h, opacity){
 	const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
 	//for edges
-	// const edges = new THREE.EdgesGeometry( cubeGeometry ); 
+	// const edges = new THREE.EdgesGeometry( cubeGeometry );
 	// const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
 	// mesh.add( line );
 
@@ -63,7 +63,7 @@ static makeGradientCylinder(c1, c2, w, h, opacity){
 	    cubeMaterial.opacity = opacity;
 	    cubeMaterial.transparent = true;
 	}
-	
+
 	const x = parseInt(Utils.colorLuminance('#'+c1.toString(16), .5));
 	const y = parseInt(Utils.colorLuminance('#'+c2.toString(16), .5));
 
@@ -89,7 +89,7 @@ static makeGradientCylinder(c1, c2, w, h, opacity){
 	const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
 	// for edges
-	// const edges = new THREE.EdgesGeometry( cubeGeometry, 60 ); 
+	// const edges = new THREE.EdgesGeometry( cubeGeometry, 60 );
 	// const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x423028 , linewidth: 2} ) );
 	// mesh.add( line );
 
@@ -103,7 +103,7 @@ static colorLuminance(hex, lum) {
         hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
     }
     lum = lum || 0;
-    
+
     // convert to decimal and change luminosity
     var rgb = '0x', c, i;
     for(i = 0; i < 3; i++) {
@@ -153,11 +153,11 @@ static expoInOut(t) {
   // return t === 1.0 ? t : 1.0 - Math.pow(2.0, -20.0 * t)
   if (t === 0 || t === 1) return t;
 
-  if (t < 0.5){ 
+  if (t < 0.5){
   	return 1.0 - Math.pow(2.0, -25.0 * t)
   } else {
   	return  1 - Math.pow(2.0, 25.0 * (t - 1.0))
-  }  
+  }
 }
 
 }

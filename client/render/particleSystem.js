@@ -1,8 +1,6 @@
 // WORK IN PROGRESS
 // todo: add back in all sphere properties for fireworks system
 
-import Utils from './utils';
-
 const particleDeathAge = 12;
 
 const system = {
@@ -36,7 +34,7 @@ const system = {
 
 };
 
-export class ParticleEngine {
+class ParticleEngine {
 	constructor()
 	{
 		/////////////////////////
@@ -222,7 +220,7 @@ export class ParticleEngine {
 	}
 }
 
-export class Particle {
+class Particle {
 	constructor(particleMesh)
 	{
 		this.lantern = this.createLantern(particleMesh, this);
